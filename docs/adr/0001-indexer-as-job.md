@@ -5,8 +5,9 @@ Accepted · 5 November 2026 · Ali (Kubernetes side), Taimoor (pipeline side)
 
 ## Context
 RAHBAR has two workloads with opposite shapes. Indexing (extract, OCR, clean, chunk,
-embed, store) is heavy, slow and rare: it takes about nine minutes on our laptop, most of
-it OCR-ing the scanned 2023 rules, and its memory peaks near 1 GiB. Answering is light and
+embed, store) is heavy, slow and rare: one run takes 16 minutes in our cluster
+(download, OCR of 41 scanned pages, embedding 1,008 chunks on a laptop CPU), and its first
+version peaked at 1 GiB of memory. Answering is light and
 constant: one embedding, one vector query and one LLM call per question, served by three
 replicas of the api.
 
@@ -18,9 +19,9 @@ cluster that is wrong four times over:
    through a different PDF; the result is an index that no single run produced, with
    duplicate or missing chunks and nobody to blame.
 2. **Every restart pays for indexing again.** A rolling update, an OOMKill, a node drain or
-   a failed liveness probe each re-run nine minutes of OCR and embedding.
+   a failed liveness probe each re-run 16 minutes of OCR and embedding.
 3. **Readiness becomes a lie.** Either the pod reports ready before its index exists and
-   serves empty retrievals, or it reports ready only after nine minutes, and the startup
+   serves empty retrievals, or it reports ready only after 16 minutes, and the startup
    probe (`failureThreshold: 30 × periodSeconds: 2` = 60 s) kills it half-way, forever.
    A rolling update would swap three working pods for three that are still chunking PDFs.
 4. **No re-index without a redeploy.** New documents would mean restarting the api: a
@@ -46,7 +47,7 @@ collection's metadata to check the embedding pin.
 asked in `store.py`). The indexer builds the new index *aside*, in `rahbar__building`, and
 only when every chunk is written and counted does it delete the live collection and rename
 the staging one into its place (`indexer/pipeline/store.py:81-84`). The api keeps answering
-from the old index for the whole run; the gap is one delete and one rename (31-34 ms in our
+from the old index for the whole run; the gap is one delete and one rename (15-38 ms in our
 logs, `swap_ms`). A Job that dies half-way leaves only a stale `__building` collection,
 which the next run deletes first. The live index is never half-written.
 
