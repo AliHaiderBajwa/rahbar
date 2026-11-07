@@ -8,7 +8,7 @@
 Exit code 0 when every gate passes, 1 when any fails. CI relies on that exit code.
 
 Given: talking to the API, reading the golden set, writing results.json, the exit
-code. Yours: the four functions marked STARTER-TODO. They are the evaluation.
+code, from the starter kit. Ours: recall_at_k, citation_validity, summarise and gate.
 """
 
 from __future__ import annotations

@@ -19,6 +19,10 @@ class IndexInfo:
     index_id: str = "none"
     metadata: dict = field(default_factory=dict)
 
+    @property
+    def is_empty(self) -> bool:
+        return self.count == 0
+
 
 class PinMismatch(RuntimeError):
     """The index was built with a different embedding model than this API uses."""

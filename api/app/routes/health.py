@@ -48,7 +48,7 @@ def readiness_checks(state: object) -> dict[str, str]:
                 metrics.INDEX_CHUNKS.set(info.count)
                 if not info.exists:
                     checks["collection"] = f"collection '{settings.collection}' does not exist"
-                elif info.count == 0:
+                elif info.is_empty:
                     checks["collection"] = f"collection '{settings.collection}' is empty"
                 else:
                     checks["collection"] = "ok"

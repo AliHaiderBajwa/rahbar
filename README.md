@@ -153,10 +153,10 @@ we ran the same manifests on k3d (`make k3d-up k3d-images k3d-apply`, overlay
 
 | Method | Path | Purpose |
 | --- | --- | --- |
-| `POST` | `/api/ask` | `{"question": "..."}` (3-500 characters, else 422) → answer, citations, `answered_from_context`, `confidence`, the retrieved chunks with scores, `cached`. `X-Request-ID` is honoured and echoed. |
-| `GET` | `/healthz` | Liveness. The process is alive; touches nothing else. |
-| `GET` | `/readyz` | Readiness. 200 only if Chroma answers, the collection exists and is non-empty, its `embed_model` equals ours, and Redis answers; otherwise 503 naming the failed check. |
-| `GET` | `/metrics` | Prometheus: requests and latency by route, retrieval and generation latency, cache hit ratio, abstentions and fallbacks by reason, tokens in/out, citations dropped, chunks in the index. |
+| POST | `/api/ask` | `{"question": "..."}` (3-500 characters, else 422) → answer, citations, `answered_from_context`, `confidence`, the retrieved chunks with scores, `cached`. `X-Request-ID` is honoured and echoed. |
+| GET | `/healthz` | Liveness. The process is alive; touches nothing else. |
+| GET | `/readyz` | Readiness. 200 only if Chroma answers, the collection exists and is non-empty, its `embed_model` equals ours, and Redis answers; otherwise 503 naming the failed check. |
+| GET | `/metrics` | Prometheus: requests and latency by route, retrieval and generation latency, cache hit ratio, abstentions and fallbacks by reason, tokens in/out, citations dropped, chunks in the index. |
 
 ## Configuration
 
