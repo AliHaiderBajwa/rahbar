@@ -16,6 +16,7 @@ spec:
       labels: {app: ui, app.kubernetes.io/part-of: rahbar}
     spec:
       serviceAccountName: ui
+      enableServiceLinks: false
       automountServiceAccountToken: false
       terminationGracePeriodSeconds: 10
       securityContext:

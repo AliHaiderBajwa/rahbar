@@ -18,6 +18,10 @@ spec:
       labels: {app: chroma, app.kubernetes.io/part-of: rahbar}
     spec:
       serviceAccountName: chroma
+      # Kubernetes injects CHROMA_PORT=tcp://<ip>:8000 for the 'chroma' Service; Chroma reads
+      # every CHROMA_* variable as config and panics ("expected u16 for key PORT").
+      # No pod here uses service-link variables, so turn them off everywhere.
+      enableServiceLinks: false
       automountServiceAccountToken: false
       terminationGracePeriodSeconds: 30
       securityContext:

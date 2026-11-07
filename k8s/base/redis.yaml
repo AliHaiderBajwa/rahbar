@@ -28,6 +28,7 @@ spec:
       labels: {app: redis, app.kubernetes.io/part-of: rahbar}
     spec:
       serviceAccountName: redis
+      enableServiceLinks: false
       automountServiceAccountToken: false
       securityContext:
         runAsNonRoot: true

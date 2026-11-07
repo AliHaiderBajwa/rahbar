@@ -23,6 +23,7 @@ spec:
           labels: {app: indexer, app.kubernetes.io/part-of: rahbar}
         spec:
           serviceAccountName: indexer
+          enableServiceLinks: false
           automountServiceAccountToken: false
           restartPolicy: OnFailure
           securityContext:

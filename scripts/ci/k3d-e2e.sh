@@ -55,7 +55,10 @@ kubectl apply -f /tmp/rahbar-ci.yaml || { sleep 15; kubectl apply -f /tmp/rahbar
 
 log "indexer Job, then the api rollout"
 if ! kubectl -n $NS wait --for=condition=complete job/indexer --timeout=420s; then
-  kubectl -n $NS get pods -o wide; kubectl -n $NS logs job/indexer --all-containers --tail=50 || true
+  kubectl -n $NS get pods -o wide
+  kubectl -n $NS logs job/indexer --all-containers --tail=50 || true
+  kubectl -n $NS logs statefulset/chroma --previous --tail=20 || true
+  kubectl -n $NS get events --sort-by=.lastTimestamp | tail -25 || true
   exit 1
 fi
 kubectl -n $NS logs job/indexer | tail -3

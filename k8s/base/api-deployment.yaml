@@ -20,6 +20,7 @@ spec:
       labels: {app: api, app.kubernetes.io/part-of: rahbar}
     spec:
       serviceAccountName: api
+      enableServiceLinks: false
       automountServiceAccountToken: false
       # preStop sleeps 5 s so the endpoint is removed from the Service before uvicorn
       # stops accepting connections; uvicorn then gets 20 s to finish in-flight answers.
