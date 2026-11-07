@@ -1,8 +1,8 @@
 # Deny by default, then allow only the paths in the architecture diagram (section 4.7):
-#   ingress-nginx -> ui, api        ui -> api
+#   ingress-nginx -> ui, api        ui -> api (and DNS), nothing else
 #   api -> chroma, redis            indexer -> chroma
 #   api, indexer -> DNS, the embedding/LLM endpoints outside the cluster
-# The ui may reach nothing at all, so it can never reach chroma. Needs a CNI that
+# The ui's only egress is the api, so it can never reach chroma or redis. Needs a CNI that
 # enforces policy: minikube with --cni=calico (make cluster), or k3s/k3d's built-in one.
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
@@ -18,7 +18,7 @@ metadata: {name: allow-dns, namespace: rahbar}
 spec:
   podSelector:
     matchExpressions:
-      - {key: app, operator: In, values: [api, indexer]}
+      - {key: app, operator: In, values: [api, indexer, ui]}
   policyTypes: [Egress]
   egress:
     - to:
@@ -43,6 +43,19 @@ spec:
             matchLabels: {kubernetes.io/metadata.name: ingress-nginx}
       ports:
         - {protocol: TCP, port: 8080}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: {name: ui-egress-to-api, namespace: rahbar}
+spec:
+  podSelector:
+    matchLabels: {app: ui}
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - podSelector: {matchLabels: {app: api}}
+      ports:
+        - {protocol: TCP, port: 8000}
 ---
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
