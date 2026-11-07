@@ -223,7 +223,10 @@ def main() -> int:
         print(f"\nnot implemented yet: {exc}")
         return 2
 
-    results["golden"] = str(args.golden)
+    try:
+        results["golden"] = str(args.golden.resolve().relative_to(HERE.parent))
+    except ValueError:
+        results["golden"] = str(args.golden)
     results["questions"] = len(rows)
     args.out.write_text(json.dumps(results, indent=2), encoding="utf-8")
     print(f"\nresults written to {args.out}")
