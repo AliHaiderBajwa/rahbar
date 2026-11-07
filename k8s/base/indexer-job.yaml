@@ -32,13 +32,18 @@ spec:
           imagePullPolicy: IfNotPresent
           command: ["python", "corpus/fetch.py", "--dest", "/corpus"]
           resources:
-            requests: {cpu: 20m, memory: 64Mi}
-            limits: {cpu: 200m, memory: 192Mi}
+            requests:
+              cpu: 20m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 192Mi
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
             capabilities:
-              drop: ["ALL"]
+              drop:
+                - ALL
           volumeMounts:
             - {name: corpus, mountPath: /corpus}
             - {name: tmp, mountPath: /tmp}
@@ -53,13 +58,18 @@ spec:
           # scanned 2023 rules. Limit 512Mi = 2.7x the sampled peak (samples are 15 s apart).
           # Too low -> OOMKilled, exit code 137, and the Job retries up to backoffLimit.
           resources:
-            requests: {cpu: 250m, memory: 256Mi}
-            limits: {cpu: "1500m", memory: 512Mi}
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: "1500m"
+              memory: 512Mi
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
             capabilities:
-              drop: ["ALL"]
+              drop:
+                - ALL
           volumeMounts:
             - {name: corpus, mountPath: /corpus, readOnly: true}
             - {name: tmp, mountPath: /tmp}      # pdf2image and tesseract write here

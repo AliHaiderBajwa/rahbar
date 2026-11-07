@@ -48,13 +48,18 @@ spec:
           # normal answering and real load, so the HPA's 70% (35m) means "unusually busy".
           # Memory: request 128Mi covers the 89Mi peak; limit 256Mi is ~3x it.
           resources:
-            requests: {cpu: 50m, memory: 128Mi}
-            limits: {cpu: 500m, memory: 256Mi}
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
             capabilities:
-              drop: ["ALL"]
+              drop:
+                - ALL
           volumeMounts:
             - {name: tmp, mountPath: /tmp}
           startupProbe:          # finished booting? liveness and readiness wait for it

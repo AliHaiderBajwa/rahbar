@@ -8,7 +8,7 @@ commit this file was submitted with.
 **The failure:** three concurrent writers on one index. `k8s/base/api-deployment.yaml:9`
 asks for `replicas: 3`, so a rollout or a fresh apply starts three api pods at once. If
 each indexed in its startup hook, all three would run our store stage against the same
-`chroma-0` and its one ReadWriteOnce volume (`k8s/base/chroma-statefulset.yaml:71`,
+`chroma-0` and its one ReadWriteOnce volume (`k8s/base/chroma-statefulset.yaml:76`,
 `volumeClaimTemplates`). With our build-aside store that is worse than duplicates: each
 pod deletes `rahbar__building`, recreates it and starts adding chunks, so pod B deletes the
 staging collection pod A is half-way through, and whichever finishes last publishes an
@@ -17,7 +17,7 @@ three would `add` the same ids into the live collection mid-query.
 
 The knock-on failures: every restart (rolling update, OOMKill, node drain) re-runs about
 20 minutes of download, OCR and embedding; and the startup probe
-(`api-deployment.yaml:60-63`, 30 × 2 s = 60 s) would kill a pod that is still OCR-ing,
+(`api-deployment.yaml:65-68`, 30 × 2 s = 60 s) would kill a pod that is still OCR-ing,
 so a rollout would never finish.
 
 **The object that prevents it:** `Job/indexer` (`k8s/base/indexer-job.yaml:5`,
@@ -25,16 +25,16 @@ so a rollout would never finish.
 with `concurrencyPolicy: Forbid` (`k8s/base/reindex-cronjob.yaml:11`): exactly one writer,
 ever. The api only reads (`api/app/retrieval/chroma.py` calls `get_collection`, `query`,
 `count`; nothing in `api/` calls `add`, and the checker's "no indexing in startup" test
-agrees). Its readiness probe (`api-deployment.yaml:69-70` → `/readyz`) keeps it out of the
+agrees). Its readiness probe (`api-deployment.yaml:74-75` → `/readyz`) keeps it out of the
 Service until the Job has published a non-empty collection, which we watched happen on
 our cluster (`docs/evidence/api-not-ready-before-index.txt`). ADR 0001 has the full
 reasoning.
 
 ## 2. Readiness depends on Chroma, liveness does not. Swap them, and Chroma is slow for 90 seconds?
 
-Today: `livenessProbe` → `/healthz` (`api-deployment.yaml:64-68`), which touches nothing
-(`api/app/routes/health.py:25`), and `readinessProbe` → `/readyz` (`:69-73`), which checks
-Chroma, the collection, the pin and Redis (`health.py:30-73`). A 90-second Chroma stall
+Today: `livenessProbe` → `/healthz` (`api-deployment.yaml:69-73`), which touches nothing
+(`api/app/routes/health.py:25`), and `readinessProbe` → `/readyz` (`:74-78`), which checks
+Chroma, the collection, the pin and Redis (`health.py:30-72`). A 90-second Chroma stall
 makes `/readyz` fail; after 3 failures × 10 s (30 s) all three pods leave the Service and
 users get a 503 from the Ingress for about a minute. Nothing restarts. When Chroma
 recovers, the next readiness probe passes and traffic returns within 10 s.
@@ -90,7 +90,7 @@ Docker with a 1 GiB limit it reached **1,024 MiB of 1 GiB** (`docker stats`, bef
 the fix in `indexer/pipeline/extract.py` that closes each pdfplumber page and OCR image
 after use; pdfplumber otherwise caches every parsed page of a 26-page scan).
 
-**Limit and margin.** `k8s/base/indexer-job.yaml:55-57`: request 256Mi, limit
+**Limit and margin.** `k8s/base/indexer-job.yaml:60-66`: request 256Mi, limit
 **512Mi**: 326Mi (2.7x) above the sampled peak. The margin is wide on purpose: samples
 are 15 s apart, so a short spike while rendering one page at 200 dpi can be missed, and
 the next corpus revision may add a longer scan. CPU is limited to 1500m; the measured
@@ -150,7 +150,7 @@ collection's metadata (written by the indexer at `indexer/pipeline/store.py:41-4
 where the ConfigMap now says something else. At start-up it logs, at ERROR,
 `"embedding model mismatch: refusing to become ready"` with the conflict
 (`api/app/main.py:53-57`); every readiness probe then returns 503 with
-`"failed": ["embed_model"]` naming both models (`api/app/routes/health.py:55-58`). The pod
+`"failed": ["embed_model"]` naming both models (`api/app/routes/health.py:55-59`). The pod
 sits at 0/1 READY, `maxUnavailable: 0` (`api-deployment.yaml:17`) stops the rollout from
 removing an old ready pod, and users keep being served by the pods that still agree with
 the index. As a second line, a query vector whose length differs from the collection's

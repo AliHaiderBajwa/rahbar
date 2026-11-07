@@ -44,13 +44,18 @@ spec:
           # Measured 58Mi and 1-3m idle holding 1,008 chunks; writes during indexing are
           # brief. Limit 384Mi leaves room for the HNSW index to grow ~5x.
           resources:
-            requests: {cpu: 25m, memory: 96Mi}
-            limits: {cpu: 500m, memory: 384Mi}
+            requests:
+              cpu: 25m
+              memory: 96Mi
+            limits:
+              cpu: 500m
+              memory: 384Mi
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true
             capabilities:
-              drop: ["ALL"]
+              drop:
+                - ALL
           volumeMounts:
             - {name: data, mountPath: /data}
             - {name: tmp, mountPath: /tmp}
@@ -74,4 +79,5 @@ spec:
       spec:
         accessModes: ["ReadWriteOnce"]
         resources:
-          requests: {storage: 1Gi}
+          requests:
+            storage: 1Gi
