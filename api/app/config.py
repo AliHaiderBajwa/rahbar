@@ -1,8 +1,8 @@
 """Runtime configuration, read once from environment variables.
 
-On the cluster these variables come from your ConfigMap and Secret (section 4.1).
-Nothing here is baked into the image, so one image runs in every environment.
-Add your own keys (relevance floor, cache settings, ...) the same way.
+On the cluster these variables come from the rahbar-config ConfigMap and the
+rahbar-secret Secret (k8s/base/configmap.yaml). Nothing here is baked into the
+image, so one image runs in every environment.
 """
 
 from __future__ import annotations
@@ -17,6 +17,10 @@ def _int(name: str, default: int) -> int:
 
 def _float(name: str, default: float) -> float:
     return float(os.environ.get(name, default))
+
+
+def _bool(name: str, default: bool) -> bool:
+    return os.environ.get(name, str(default)).strip().lower() in {"1", "true", "yes", "on"}
 
 
 @dataclass(frozen=True)
@@ -35,11 +39,22 @@ class Settings:
 
     # Retrieval and generation
     top_k: int = 5
+    hybrid: bool = True              # HYBRID: add a lexical leg for exact terms (section 5.2)
+    relevance_floor: float = 0.55    # RELEVANCE_FLOOR: best cosine below this -> abstain
     temperature: float = 0.2
     llm_model: str = "llama3.2:3b"
+    llm_timeout: float = 30.0        # LLM_TIMEOUT seconds, per call
+    max_tokens: int = 700            # MAX_TOKENS for the model's JSON reply
     ollama_url: str = "http://host.minikube.internal:11434"
-    hosted_base_url: str = ""        # e.g. an OpenAI-compatible endpoint
+    hosted_base_url: str = ""        # e.g. https://api.groq.com/openai/v1
     llm_api_key: str = field(default="", repr=False)   # from the Secret; never log it
+
+    # Semantic cache (section 3.3)
+    redis_host: str = ""             # REDIS_HOST; empty disables the cache (unit tests)
+    redis_port: int = 6379
+    cache_threshold: float = 0.96    # CACHE_THRESHOLD: cosine at or above this is a hit
+    cache_ttl: int = 86400           # CACHE_TTL seconds
+    cache_max_entries: int = 256
 
     log_level: str = "INFO"
 
@@ -53,10 +68,19 @@ def get_settings() -> Settings:
         chroma_port=_int("CHROMA_PORT", 8000),
         collection=os.environ.get("CHROMA_COLLECTION", "rahbar"),
         top_k=_int("TOP_K", 5),
+        hybrid=_bool("HYBRID", True),
+        relevance_floor=_float("RELEVANCE_FLOOR", 0.55),
         temperature=_float("TEMPERATURE", 0.2),
         llm_model=os.environ.get("LLM_MODEL", "llama3.2:3b"),
+        llm_timeout=_float("LLM_TIMEOUT", 30.0),
+        max_tokens=_int("MAX_TOKENS", 700),
         ollama_url=os.environ.get("OLLAMA_URL", "http://host.minikube.internal:11434"),
         hosted_base_url=os.environ.get("HOSTED_BASE_URL", ""),
         llm_api_key=os.environ.get("LLM_API_KEY", ""),
+        redis_host=os.environ.get("REDIS_HOST", ""),
+        redis_port=_int("REDIS_PORT", 6379),
+        cache_threshold=_float("CACHE_THRESHOLD", 0.96),
+        cache_ttl=_int("CACHE_TTL", 86400),
+        cache_max_entries=_int("CACHE_MAX_ENTRIES", 256),
         log_level=os.environ.get("LOG_LEVEL", "INFO"),
     )
