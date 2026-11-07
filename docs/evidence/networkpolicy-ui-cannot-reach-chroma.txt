@@ -1,0 +1,9 @@
+# NetworkPolicy check: the ui pod may reach the api, never chroma or redis (k3s enforces NetworkPolicy)
+$ kubectl -n rahbar exec deploy/ui -- wget -qO- -T 5 http://api:8000/healthz
+{"status":"alive"}
+$ kubectl -n rahbar exec deploy/ui -- wget -qO- -T 5 http://chroma:8000/api/v2/heartbeat
+wget: can't connect to remote host (10.43.246.42): Connection refused
+command terminated with exit code 1
+exit code: 1
+$ kubectl -n rahbar exec deploy/api -- python -c '...urlopen("http://chroma:8000/api/v2/heartbeat")'
+{"nanosecond heartbeat":1794070350953459979}

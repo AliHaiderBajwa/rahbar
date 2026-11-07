@@ -1,0 +1,76 @@
+# HPA under load (k3d, 7 Nov 2026). Load: 30 concurrent clients for 240 s through the Ingress,
+# POST /api/ask with a too-short question (422 from validation: CPU-only work, no model call;
+# real questions wait on Groq and barely use CPU, see ENGINEERING-NOTES question 3).
+# load result: requests by status: {422: 45462}
+
+# time     TARGETS (cpu usage / request vs target)   MIN MAX   (sampled every 15 s)
+21:54:26 cpu: 9%/70% 3 8
+21:54:41 cpu: 10%/70% 3 8
+21:54:56 cpu: 124%/70% 3 8
+21:55:11 cpu: 360%/70% 3 8
+21:55:26 cpu: 289%/70% 3 8
+21:55:42 cpu: 192%/70% 3 8
+21:55:57 cpu: 189%/70% 3 8
+21:56:12 cpu: 188%/70% 3 8
+21:56:27 cpu: 189%/70% 3 8
+21:56:42 cpu: 191%/70% 3 8
+21:56:57 cpu: 189%/70% 3 8
+21:57:13 cpu: 191%/70% 3 8
+21:57:28 cpu: 158%/70% 3 8
+21:57:43 cpu: 149%/70% 3 8
+21:57:58 cpu: 146%/70% 3 8
+21:58:13 cpu: 150%/70% 3 8
+21:58:28 cpu: 149%/70% 3 8
+21:58:44 cpu: 116%/70% 3 8
+21:58:59 cpu: 22%/70% 3 8
+21:59:14 cpu: 10%/70% 3 8
+21:59:29 cpu: 10%/70% 3 8
+21:59:44 cpu: 10%/70% 3 8
+21:59:59 cpu: 10%/70% 3 8
+22:00:14 cpu: 10%/70% 3 8
+
+$ kubectl -n rahbar get hpa api
+NAME   REFERENCE        TARGETS        MINPODS   MAXPODS   REPLICAS   AGE
+api    Deployment/api   cpu: 10%/70%   3         8         8          29m
+
+$ kubectl -n rahbar describe hpa api | sed -n '/Events/,$p'
+Events:
+  Type     Reason                        Age                 From                       Message
+  ----     ------                        ----                ----                       -------
+  Warning  FailedComputeMetricsReplicas  26m (x12 over 29m)  horizontal-pod-autoscaler  invalid metrics (1 invalid out of 1), first error is: failed to get cpu resource metric value: failed to get cpu utilization: did not receive metrics for targeted pods (pods might be unready)
+  Warning  FailedGetResourceMetric       14m (x61 over 29m)  horizontal-pod-autoscaler  failed to get cpu utilization: did not receive metrics for targeted pods (pods might be unready)
+  Normal   SuccessfulRescale             5m59s               horizontal-pod-autoscaler  New size: 6; reason: cpu resource utilization (percentage of request) above target
+  Normal   SuccessfulRescale             5m44s               horizontal-pod-autoscaler  New size: 8; reason: cpu resource utilization (percentage of request) above target
+
+$ kubectl -n rahbar get pods -l app=api
+NAME                   READY   STATUS    RESTARTS   AGE
+api-68d9d48666-6nj4d   1/1     Running   0          29m
+api-68d9d48666-f6wmv   1/1     Running   0          5m44s
+api-68d9d48666-gm5k2   1/1     Running   0          7m53s
+api-68d9d48666-jlmb8   1/1     Running   0          29m
+api-68d9d48666-pcdm8   1/1     Running   0          5m59s
+api-68d9d48666-qf2q6   1/1     Running   0          5m59s
+api-68d9d48666-rdc5h   1/1     Running   0          5m44s
+api-68d9d48666-sx9w9   1/1     Running   0          5m59s
+
+$ kubectl -n rahbar get endpoints api
+NAME   ENDPOINTS                                                     AGE
+api    10.42.0.10:8000,10.42.0.12:8000,10.42.0.20:8000 + 5 more...   29m
+
+# ---- after the load stopped (behavior.scaleDown.stabilizationWindowSeconds: 120) ----
+$ kubectl -n rahbar get hpa api
+NAME   REFERENCE        TARGETS       MINPODS   MAXPODS   REPLICAS   AGE
+api    Deployment/api   cpu: 9%/70%   3         8         3          30m
+$ kubectl -n rahbar describe hpa api | grep Rescale
+  Normal   SuccessfulRescale             6m22s               horizontal-pod-autoscaler  New size: 6; reason: cpu resource utilization (percentage of request) above target
+  Normal   SuccessfulRescale             6m7s                horizontal-pod-autoscaler  New size: 8; reason: cpu resource utilization (percentage of request) above target
+  Normal   SuccessfulRescale             21s                 horizontal-pod-autoscaler  New size: 3; reason: All metrics below target
+
+# Timeline (event timestamps from `kubectl get events`, converted to local time):
+#   21:54:26  load starts (first sample: cpu 9%/70%, 3 replicas)
+#   21:54:43  SuccessfulRescale -> 6   (cpu above target)
+#   21:54:58  SuccessfulRescale -> 8   (maxReplicas)
+#   21:58:26  load stops; cpu falls to 22%, then 10%
+#   22:00:44  SuccessfulRescale -> 3   (all metrics below target, after the 120 s stabilization window)
+# The early FailedGetResourceMetric warnings date from the first indexing run, when all api pods
+# were unready (no collection yet): the HPA skips unready pods, so it had nothing to read.

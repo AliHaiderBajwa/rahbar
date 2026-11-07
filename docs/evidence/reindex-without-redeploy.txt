@@ -1,0 +1,8 @@
+# Re-index with no redeploy (section 4.2), and the cache invalidation that follows (section 3.3)
+$ kubectl -n rahbar exec deploy/redis -- redis-cli --scan --pattern 'rahbar:cache:*'    # before
+rahbar:cache:b1928eeed1ca
+$ kubectl -n rahbar exec deploy/api -- python -c '...get_collection("rahbar").metadata["index_id"]'   # before
+b1928eeed1ca
+
+$ kubectl create job --from=cronjob/reindex manual-reindex-1 -n rahbar
+job.batch/manual-reindex-1 created

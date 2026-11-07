@@ -1,0 +1,54 @@
+$ kubectl top pods -n rahbar --containers     # steady state, after the indexer Job finished
+POD                      NAME     CPU(cores)   MEMORY(bytes)   
+api-68d9d48666-69h8r     api      5m           78Mi            
+api-68d9d48666-6nj4d     api      5m           81Mi            
+api-68d9d48666-jlmb8     api      5m           81Mi            
+chroma-0                 chroma   3m           64Mi            
+redis-6cd5577fdd-7ff9c   redis    19m          5Mi             
+ui-859d448b8-q28rn       ui       1m           2Mi             
+
+# api pods sampled every 15 s DURING the 21-question golden run through the Ingress (each answer waits 1-15 s on Groq):
+21:49:12
+api-68d9d48666-69h8r   6m    77Mi   
+api-68d9d48666-6nj4d   5m    80Mi   
+api-68d9d48666-jlmb8   6m    78Mi   
+21:49:27
+api-68d9d48666-69h8r   9m    78Mi   
+api-68d9d48666-6nj4d   10m   81Mi   
+api-68d9d48666-jlmb8   9m    81Mi   
+21:49:42
+api-68d9d48666-69h8r   7m    78Mi   
+api-68d9d48666-6nj4d   6m    81Mi   
+api-68d9d48666-jlmb8   8m    81Mi   
+21:49:57
+api-68d9d48666-69h8r   5m    78Mi   
+api-68d9d48666-6nj4d   8m    81Mi   
+api-68d9d48666-jlmb8   8m    81Mi   
+21:50:13
+api-68d9d48666-69h8r   8m    78Mi   
+api-68d9d48666-6nj4d   6m    81Mi   
+api-68d9d48666-jlmb8   7m    81Mi   
+21:50:28
+api-68d9d48666-69h8r   8m    78Mi   
+api-68d9d48666-6nj4d   8m    81Mi   
+api-68d9d48666-jlmb8   8m    81Mi   
+21:50:43
+api-68d9d48666-69h8r   7m    78Mi   
+api-68d9d48666-6nj4d   6m    81Mi   
+api-68d9d48666-jlmb8   5m    81Mi   
+21:50:58
+api-68d9d48666-69h8r   6m    78Mi   
+api-68d9d48666-6nj4d   6m    81Mi   
+api-68d9d48666-jlmb8   8m    81Mi   
+21:51:13
+api-68d9d48666-69h8r   8m    78Mi   
+api-68d9d48666-6nj4d   8m    81Mi   
+api-68d9d48666-jlmb8   8m    81Mi   
+21:51:28
+api-68d9d48666-69h8r   5m    78Mi   
+api-68d9d48666-6nj4d   8m    81Mi   
+api-68d9d48666-jlmb8   7m    81Mi   
+21:51:43
+api-68d9d48666-69h8r   8m    78Mi   
+api-68d9d48666-6nj4d   6m    81Mi   
+api-68d9d48666-jlmb8   7m    82Mi   

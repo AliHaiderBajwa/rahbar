@@ -1,0 +1,63 @@
+$ kubectl -n rahbar get pods -l app=api
+NAME                   READY   STATUS    RESTARTS   AGE
+api-68d9d48666-69h8r   1/1     Running   0          21m
+api-68d9d48666-6nj4d   1/1     Running   0          21m
+api-68d9d48666-jlmb8   1/1     Running   0          21m
+
+$ kubectl -n rahbar delete pod/api-68d9d48666-69h8r     # while a client asks a question every second through the Ingress
+pod "api-68d9d48666-69h8r" deleted from rahbar namespace
+
+$ kubectl -n rahbar get pods -l app=api    # the Deployment replaced it
+NAME                   READY   STATUS    RESTARTS   AGE
+api-68d9d48666-6nj4d   1/1     Running   0          22m
+api-68d9d48666-gm5k2   1/1     Running   0          46s
+api-68d9d48666-jlmb8   1/1     Running   0          22m
+
+# HTTP status of each request during the deletion (one per second):
+21:52:43 200
+21:52:44 200
+21:52:45 200
+21:52:46 200
+21:52:47 200
+21:52:49 200
+21:52:50 200
+21:52:51 200
+21:52:52 200
+21:52:53 200
+21:52:55 200
+21:52:56 200
+21:52:57 200
+21:52:58 200
+21:52:59 200
+21:53:00 200
+21:53:02 200
+21:53:03 200
+21:53:04 200
+21:53:05 200
+21:53:06 200
+21:53:07 200
+21:53:09 200
+21:53:10 200
+21:53:11 200
+21:53:12 200
+21:53:13 200
+21:53:14 200
+21:53:16 200
+21:53:17 200
+21:53:18 200
+21:53:19 200
+21:53:20 200
+21:53:21 200
+21:53:23 200
+21:53:24 200
+21:53:25 200
+21:53:26 200
+21:53:27 200
+21:53:28 200
+21:53:30 200
+21:53:31 200
+21:53:32 200
+21:53:33 200
+21:53:34 200
+
+# summary: 45 x 200, 0 x other
