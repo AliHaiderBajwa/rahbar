@@ -13,7 +13,8 @@ INGRESS_IP ?= $(shell minikube ip 2>/dev/null)
 HOST ?= rahbar.local
 
 .DEFAULT_GOAL := help
-.PHONY: help install test lint dev cluster images apply secret index ask fetch eval eval-fixtures check
+.PHONY: help install test lint dev cluster images apply secret index ask fetch eval eval-fixtures check \
+        k3d-up k3d-images k3d-apply top
 
 help: ## list the targets
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  make %-14s %s\n", $$1, $$2}'
@@ -24,11 +25,11 @@ install: ## create .venv and install the api, indexer and tool dependencies
 	$(BIN)/pip install -q -r api/requirements-dev.txt -r indexer/requirements-dev.txt
 
 test: ## run the api and indexer tests (stubs only: no cluster, no model, no network)
-	cd api && $(BIN)/pytest -q
-	cd indexer && $(BIN)/pytest -q
+	cd api && $(BIN)/pytest -q --cov=app --cov-report=term --cov-fail-under=60
+	cd indexer && $(BIN)/pytest -q --cov=pipeline --cov-report=term --cov-fail-under=60
 
 lint: ## ruff and mypy over everything in Python
-	$(BIN)/ruff check api indexer eval corpus
+	$(BIN)/ruff check api indexer eval corpus scripts
 	cd api && $(BIN)/mypy app
 	cd indexer && $(BIN)/mypy pipeline
 
@@ -40,15 +41,15 @@ cluster: ## start minikube with Calico, then enable metrics-server and ingress
 	minikube addons enable metrics-server
 	minikube addons enable ingress
 
-images: ## build the three images and load them into minikube (needs yours: Dockerfiles)
+images: ## build the three images and load them into minikube
 	docker build -t rahbar-api:$(TAG) api
-	docker build -t rahbar-indexer:$(TAG) indexer
+	docker build -t rahbar-indexer:$(TAG) --build-context corpus=corpus --build-context fixtures=eval/fixtures indexer
 	docker build -t rahbar-ui:$(TAG) ui
 	minikube image load rahbar-api:$(TAG)
 	minikube image load rahbar-indexer:$(TAG)
 	minikube image load rahbar-ui:$(TAG)
 
-apply: ## apply the dev overlay (needs yours: manifests)
+apply: ## apply the dev overlay (minikube)
 	kubectl apply -k k8s/overlays/dev
 
 secret: ## create the LLM key Secret from the LLM_API_KEY variable; never from a file
@@ -56,7 +57,7 @@ secret: ## create the LLM key Secret from the LLM_API_KEY variable; never from a
 	kubectl create secret generic rahbar-secret -n $(NS) \
 	  --from-literal=LLM_API_KEY="$$LLM_API_KEY" --dry-run=client -o yaml | kubectl apply -f -
 
-index: ## run the indexer once, from the CronJob's template (needs yours: CronJob reindex)
+index: ## re-index now, from the CronJob's template: no redeploy, no downtime
 	kubectl create job --from=cronjob/reindex reindex-$$(date +%s) -n $(NS)
 	@echo "watch it with: kubectl get jobs -n $(NS) -w"
 
@@ -76,3 +77,18 @@ eval-fixtures: ## score the CI fixture golden set against a local `make dev`
 
 check: ## run the submission checker
 	$(PY) scripts/check_submission.py
+
+k3d-up: ## (our laptop) k3d cluster + ingress-nginx + Ollama container on the k3d network
+	scripts/k3d-up.sh
+
+k3d-images: ## (our laptop) build the three images and import them into k3d
+	docker build -t rahbar-api:$(TAG) api
+	docker build -t rahbar-indexer:$(TAG) --build-context corpus=corpus --build-context fixtures=eval/fixtures indexer
+	docker build -t rahbar-ui:$(TAG) ui
+	k3d image import -c rahbar rahbar-api:$(TAG) rahbar-indexer:$(TAG) rahbar-ui:$(TAG)
+
+k3d-apply: ## (our laptop) apply the k3d overlay
+	kubectl apply -k k8s/overlays/k3d
+
+top: ## save kubectl top output as evidence (section 4.5)
+	kubectl top pods -n $(NS) --containers | tee docs/evidence/kubectl-top.txt
