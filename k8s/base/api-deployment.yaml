@@ -42,12 +42,14 @@ spec:
             - name: LLM_API_KEY
               valueFrom:
                 secretKeyRef: {name: rahbar-secret, key: LLM_API_KEY, optional: true}
-          # Numbers from `kubectl top pods` under load (docs/evidence/kubectl-top.txt):
-          # idle ~3m/70Mi, busy ~45m/95Mi per pod. Request = typical busy CPU, so the
-          # HPA's 70% target means "busier than normal"; memory limit = 3x the peak.
+          # From `kubectl top` (docs/evidence/kubectl-top.txt, hpa-scale-up-under-load.txt):
+          # idle 4-5m and 66-89Mi; 9-10m while answering through Groq; ~200m for a few
+          # seconds at start-up; 75m per pod under CPU load. Request 50m sits between
+          # normal answering and real load, so the HPA's 70% (35m) means "unusually busy".
+          # Memory: request 128Mi covers the 89Mi peak; limit 256Mi is ~3x it.
           resources:
             requests: {cpu: 50m, memory: 128Mi}
-            limits: {cpu: 500m, memory: 384Mi}
+            limits: {cpu: 500m, memory: 256Mi}
           securityContext:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: true

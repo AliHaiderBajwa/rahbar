@@ -57,12 +57,12 @@ spec:
               args: []                      # the real pipeline; ["--dummy"] for week-1 testing
               envFrom:
                 - configMapRef: {name: rahbar-config}
-              # Measured peak (docs/evidence/kubectl-top.txt): OCR of the scanned 2023 rules
-              # plus pdfplumber on the 85-page annual report. Limit = peak + ~50% margin.
+              # Measured peak 186Mi / 1411m CPU (docs/evidence/kubectl-top-indexer.txt), OCR of the
+              # scanned 2023 rules. Limit 512Mi = 2.7x the sampled peak (samples are 15 s apart).
               # Too low -> OOMKilled, exit code 137, and the Job retries up to backoffLimit.
               resources:
-                requests: {cpu: 250m, memory: 384Mi}
-                limits: {cpu: "1500m", memory: 1Gi}
+                requests: {cpu: 250m, memory: 256Mi}
+                limits: {cpu: "1500m", memory: 512Mi}
               securityContext:
                 allowPrivilegeEscalation: false
                 readOnlyRootFilesystem: true
