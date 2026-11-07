@@ -7,6 +7,5 @@ pyyaml==6.0.2
 # Extraction. OCR also needs system packages in your Dockerfile: tesseract-ocr, poppler-utils.
 # 0.11.10 pins pdfminer.six 20260107; older releases pin a pdfminer with CVE-2025-64512 (HIGH).
 pdfplumber==0.11.10
-pypdf==5.4.0
 pytesseract==0.3.13
 pdf2image==1.17.0
