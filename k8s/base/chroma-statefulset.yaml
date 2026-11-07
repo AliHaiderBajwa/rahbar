@@ -1,0 +1,71 @@
+# Chroma is a StatefulSet, not a Deployment (ARCHITECTURE.md, ADR 0001): it owns data on
+# disk. volumeClaimTemplates gives the pod a PVC that follows its stable identity
+# (chroma-0 always re-attaches data-chroma-0), and a StatefulSet never runs two copies
+# of chroma-0 at once during an update, so two writers can never share the volume.
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: chroma
+  namespace: rahbar
+  labels: {app: chroma, app.kubernetes.io/part-of: rahbar}
+spec:
+  serviceName: chroma
+  replicas: 1
+  selector:
+    matchLabels: {app: chroma}
+  template:
+    metadata:
+      labels: {app: chroma, app.kubernetes.io/part-of: rahbar}
+    spec:
+      serviceAccountName: chroma
+      automountServiceAccountToken: false
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000                 # the PVC is made writable for uid 1000
+        seccompProfile: {type: RuntimeDefault}
+      containers:
+        - name: chroma
+          # Same version as chromadb-client==1.0.12 in api/ and indexer/ requirements.
+          image: chromadb/chroma:1.0.12
+          imagePullPolicy: IfNotPresent
+          ports:
+            - {name: http, containerPort: 8000}
+          env:
+            - {name: IS_PERSISTENT, value: "TRUE"}
+            - {name: PERSIST_DIRECTORY, value: /data}
+            - {name: ANONYMIZED_TELEMETRY, value: "FALSE"}
+          resources:
+            requests: {cpu: 50m, memory: 192Mi}
+            limits: {cpu: "1", memory: 768Mi}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+          volumeMounts:
+            - {name: data, mountPath: /data}
+            - {name: tmp, mountPath: /tmp}
+          startupProbe:
+            httpGet: {path: /api/v2/heartbeat, port: 8000}
+            failureThreshold: 30
+            periodSeconds: 2
+          readinessProbe:
+            httpGet: {path: /api/v2/heartbeat, port: 8000}
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: {path: /api/v2/heartbeat, port: 8000}
+            periodSeconds: 20
+            failureThreshold: 3
+      volumes:
+        - name: tmp
+          emptyDir: {sizeLimit: 64Mi}
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests: {storage: 1Gi}
