@@ -1,0 +1,41 @@
+# One ConfigMap read by BOTH the api and the indexer (envFrom). EMBED_MODEL lives here
+# exactly once, which is half of the embedding pin; the other half is the check in
+# api/app/retrieval/chroma.py (check_pin) against the collection's metadata (section 4.4).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rahbar-config
+  namespace: rahbar
+data:
+  # --- which implementations -------------------------------------------------------
+  RETRIEVER: "chroma"
+  LLM_PROVIDER: "hosted"                    # stub | ollama-host | ollama-incluster | hosted
+  LLM_MODEL: "openai/gpt-oss-20b"
+  HOSTED_BASE_URL: "https://api.groq.com/openai/v1"
+  # --- the embedding pin (section 4.4): read by the api AND the indexer ------------
+  EMBED_MODEL: "nomic-embed-text"
+  OLLAMA_URL: "http://host.minikube.internal:11434"
+  # --- vector store -----------------------------------------------------------------
+  CHROMA_HOST: "chroma"
+  CHROMA_PORT: "8000"
+  CHROMA_COLLECTION: "rahbar"
+  # --- indexing (unit: words; sweep in docs/PIPELINE.md picked 300/60) ---------------
+  CHUNK_SIZE: "300"
+  CHUNK_OVERLAP: "60"
+  CORPUS_DIR: "/corpus"
+  # --- retrieval and grounding ------------------------------------------------------
+  TOP_K: "5"
+  HYBRID: "true"                            # lexical leg for clause numbers and codes
+  RELEVANCE_FLOOR: "0.55"                   # best cosine below this -> honest abstention
+  # Temperature 0.2: facts and JSON want a near-deterministic decoder; 0.2 rather than 0
+  # keeps a little variety in phrasing without letting the model wander off the evidence.
+  TEMPERATURE: "0.2"
+  LLM_TIMEOUT: "30"
+  MAX_TOKENS: "700"
+  # --- semantic cache (section 3.3) ---------------------------------------------------
+  REDIS_HOST: "redis"
+  REDIS_PORT: "6379"
+  CACHE_THRESHOLD: "0.96"                   # lowest value with zero false hits (PIPELINE.md)
+  CACHE_TTL: "86400"
+  CACHE_MAX_ENTRIES: "256"
+  LOG_LEVEL: "INFO"

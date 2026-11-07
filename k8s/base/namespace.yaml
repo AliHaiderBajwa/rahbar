@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: rahbar
+  labels:
+    app.kubernetes.io/part-of: rahbar
+    # Pod Security Admission: every pod here must satisfy the "restricted" profile
+    # (non-root, no privilege escalation, all capabilities dropped, seccomp).
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/warn: restricted
