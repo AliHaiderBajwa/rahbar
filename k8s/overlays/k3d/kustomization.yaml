@@ -7,3 +7,5 @@ resources:
   - ../dev
 patches:
   - path: config.yaml
+  - path: ingress-localhost.yaml
+    target: {kind: Ingress, name: rahbar}
