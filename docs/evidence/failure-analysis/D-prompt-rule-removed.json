@@ -1,0 +1,83 @@
+{
+  "recall@3": 0.0,
+  "recall@5": 0.0,
+  "recall@5_by_type": {
+    "ordinary": 0.0
+  },
+  "recall@3_by_type": {
+    "ordinary": 0.0
+  },
+  "citation_validity": 1.0,
+  "citations_checked": 0,
+  "abstention_correctness": 1.0,
+  "must_abstain_questions": 2,
+  "answer_rate_on_answerable": 0.0,
+  "expect_in_answer_rate": 0.0,
+  "per_question": [
+    {
+      "id": "g11",
+      "type": "ordinary",
+      "recall@3": 0.0,
+      "recall@5": 0.0,
+      "answered_from_context": false,
+      "must_abstain": false,
+      "citations": 0,
+      "citation_validity": null,
+      "expect_in_answer": false,
+      "cached": false,
+      "top_score": 0.7683,
+      "retrieved": [
+        "annual-report-2023-24.pdf | Lahore Campus",
+        "annual-report-2023-24.pdf | Lahore Campus",
+        "annual-report-2023-24.pdf | Lahore Campus",
+        "annual-report-2023-24.pdf | Lahore Campus",
+        "annual-report-2023-24.pdf | Lahore Campus"
+      ],
+      "seconds": 1.81
+    },
+    {
+      "id": "a01",
+      "type": "abstain",
+      "recall@3": null,
+      "recall@5": null,
+      "answered_from_context": false,
+      "must_abstain": true,
+      "citations": 0,
+      "citation_validity": null,
+      "expect_in_answer": null,
+      "cached": false,
+      "top_score": 0.7362,
+      "retrieved": [
+        "fee-structure-page.html | Miscellaneous Fees",
+        "fee-structure-page.html | Tuition Fee (w.e.f. Fall 2026 semester)",
+        "prospectus-2026-academic-rules-and-regulations.pdf | Underexceptional",
+        "fee-structure-page.html | Admission Fee",
+        "student-handbook-jun-2026.pdf | Fee Structure and Mode of Payment"
+      ],
+      "seconds": 0.69
+    },
+    {
+      "id": "a02",
+      "type": "abstain",
+      "recall@3": null,
+      "recall@5": null,
+      "answered_from_context": false,
+      "must_abstain": true,
+      "citations": 0,
+      "citation_validity": null,
+      "expect_in_answer": null,
+      "cached": false,
+      "top_score": 0.6689,
+      "retrieved": [
+        "annual-report-2023-24.pdf | Islamabad Campus",
+        "annual-report-2019-20.pdf | Islamabad Campus",
+        "annual-report-2019-20.pdf | Karachi Campus",
+        "annual-report-2023-24.pdf | Karachi Campus",
+        "annual-report-2023-24.pdf | Peshawar Campus"
+      ],
+      "seconds": 0.96
+    }
+  ],
+  "golden": "/tmp/claude-1000/-home-zexr-Desktop-SCD-A2/28460313-1e47-4ada-adf8-5d25885faafb/scratchpad/golden-D.yaml",
+  "questions": 3
+}
