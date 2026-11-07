@@ -132,8 +132,8 @@ def main() -> int:
             dump_documents(docs, args.dump_docs)
             count = sum(len(d.pages) for d in docs)
         else:
-            docs = load_documents(args.from_docs) if args.from_docs else None
-            count = run_pipeline(settings, docs)
+            loaded = load_documents(args.from_docs) if args.from_docs else None
+            count = run_pipeline(settings, loaded)
     except NotImplementedError as exc:
         log("indexer stage not implemented yet", error=str(exc))
         return 2
