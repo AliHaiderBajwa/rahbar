@@ -82,4 +82,6 @@ retrieved = {(x["source"], x["section"]) for x in r["retrieved"]}
 assert all((c["source"], c["section"]) in retrieved for c in r["citations"]), "fabricated citation"
 print("smoke test passed:", r["citations"][0])
 PY
-curl -sf -H 'Host: rahbar.local' http://localhost:8080/ | grep -q RAHBAR && echo "ui served at /"
+# capture first: `curl | grep -q` lets grep close the pipe early, and curl exits 23
+page=$(curl -sf -H 'Host: rahbar.local' http://localhost:8080/)
+grep -q RAHBAR <<<"$page" && echo "ui served at /"
