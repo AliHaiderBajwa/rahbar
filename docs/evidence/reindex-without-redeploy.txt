@@ -6,3 +6,27 @@ b1928eeed1ca
 
 $ kubectl create job --from=cronjob/reindex manual-reindex-1 -n rahbar
 job.batch/manual-reindex-1 created
+
+$ kubectl -n rahbar get job manual-reindex-1
+NAME               STATUS     COMPLETIONS   DURATION   AGE
+manual-reindex-1   Complete   1/1           17m        17m
+$ kubectl -n rahbar logs job/manual-reindex-1 | tail -2
+{"logger": "rahbar.indexer.store", "msg": "index published", "collection": "rahbar", "chunks": 1008, "index_id": "4dcc91100345", "embed_model": "nomic-embed-text", "dimension": 768, "swap_ms": 33.4}
+{"ts": "2026-11-07T17:22:26Z", "logger": "rahbar.indexer", "msg": "indexer finished", "chunks": 1008, "seconds": 992.3}
+
+$ ... index_id   # after: a new id, stamped by the Job
+4dcc91100345
+$ kubectl -n rahbar exec deploy/redis -- redis-cli --scan --pattern 'rahbar:cache:*'    # right after the Job
+rahbar:cache:b1928eeed1ca
+# the old namespace is still there until an api pod serves its first request on the new index:
+
+$ curl -s -D - -o /dev/null -X POST http://127.0.0.1:8080/api/ask -H 'Host: rahbar.local' ... "What is the deadline to withdraw from a course?"
+HTTP/1.1 200 OK          (no X-Cache: HIT header: a miss, answered from the new index)
+$ kubectl -n rahbar exec deploy/redis -- redis-cli --scan --pattern 'rahbar:cache:*'
+rahbar:cache:4dcc91100345
+$ kubectl -n rahbar logs -l app=api | grep 'cache invalidated'
+{"ts": "2026-11-07T17:23:09Z", "level": "INFO", "logger": "rahbar.cache", "msg": "cache invalidated for new index", "index_id": "4dcc91100345", "keys_removed": 1, ...}
+
+# meanwhile the api kept answering from the old index (one question every 10 s through the Ingress):
+# 81 x HTTP 200, 0 x other, over 22:05:14-22:22:24
+# indexer memory under the new 512Mi limit: peak 188Mi (kubectl top, every 10 s)
