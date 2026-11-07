@@ -40,7 +40,7 @@ class Settings:
     # Retrieval and generation
     top_k: int = 5
     hybrid: bool = True              # HYBRID: add a lexical leg for exact terms (section 5.2)
-    relevance_floor: float = 0.55    # RELEVANCE_FLOOR: best cosine below this -> abstain
+    relevance_floor: float = 0.66    # RELEVANCE_FLOOR: best cosine below this -> abstain
     temperature: float = 0.2
     llm_model: str = "llama3.2:3b"
     llm_timeout: float = 30.0        # LLM_TIMEOUT seconds, per call
@@ -69,7 +69,7 @@ def get_settings() -> Settings:
         collection=os.environ.get("CHROMA_COLLECTION", "rahbar"),
         top_k=_int("TOP_K", 5),
         hybrid=_bool("HYBRID", True),
-        relevance_floor=_float("RELEVANCE_FLOOR", 0.55),
+        relevance_floor=_float("RELEVANCE_FLOOR", 0.66),
         temperature=_float("TEMPERATURE", 0.2),
         llm_model=os.environ.get("LLM_MODEL", "llama3.2:3b"),
         llm_timeout=_float("LLM_TIMEOUT", 30.0),

@@ -1,0 +1,237 @@
+{
+  "model": "nomic-embed-text",
+  "same": [
+    [
+      "What CGPA do I need to avoid academic warning?",
+      "What is the minimum CGPA to stay off academic warning?",
+      0.907
+    ],
+    [
+      "How many courses can I repeat in summer?",
+      "What is the maximum number of courses I can repeat in the summer semester?",
+      0.9301
+    ],
+    [
+      "Is the rechecking fee refunded?",
+      "Do I get my rechecking fee back?",
+      0.9361
+    ],
+    [
+      "What is the admission fee?",
+      "How much is the admission fee?",
+      0.9488
+    ],
+    [
+      "Can I use ChatGPT in lab courses?",
+      "Is ChatGPT allowed in labs?",
+      0.9054
+    ],
+    [
+      "What is the attendance requirement?",
+      "What attendance is required in lectures?",
+      0.8643
+    ]
+  ],
+  "different": [
+    [
+      "What CGPA do I need to avoid academic warning?",
+      "What CGPA do I need to graduate?",
+      0.7689
+    ],
+    [
+      "What is the deadline to withdraw from a course?",
+      "What is the deadline to drop a course?",
+      0.895
+    ],
+    [
+      "What is the deadline to withdraw from a course?",
+      "What was the deadline to withdraw from a course under the 2023 rules?",
+      0.9061
+    ],
+    [
+      "How many courses can I repeat in the summer semester?",
+      "How many courses can I register for in the summer semester?",
+      0.9125
+    ],
+    [
+      "What is the tuition fee per credit hour for BS?",
+      "What is the tuition fee per credit hour for MS?",
+      0.8634
+    ],
+    [
+      "Can I use ChatGPT in lab courses?",
+      "Can I use ChatGPT in non-lab courses?",
+      0.9501
+    ],
+    [
+      "What is the minimum attendance for undergraduate programs?",
+      "What is the minimum attendance for graduate programs?",
+      0.9244
+    ],
+    [
+      "What happens if I fail a course?",
+      "What happens if I miss a final exam?",
+      0.7642
+    ]
+  ],
+  "rows": [
+    {
+      "threshold": 0.85,
+      "false_hits": 6,
+      "true_hits": 6,
+      "paraphrases": 6,
+      "false_hit_examples": [
+        [
+          "What is the deadline to withdraw from a course?",
+          "What is the deadline to drop a course?",
+          0.895
+        ],
+        [
+          "What is the deadline to withdraw from a course?",
+          "What was the deadline to withdraw from a course under the 2023 rules?",
+          0.9061
+        ],
+        [
+          "How many courses can I repeat in the summer semester?",
+          "How many courses can I register for in the summer semester?",
+          0.9125
+        ],
+        [
+          "What is the tuition fee per credit hour for BS?",
+          "What is the tuition fee per credit hour for MS?",
+          0.8634
+        ],
+        [
+          "Can I use ChatGPT in lab courses?",
+          "Can I use ChatGPT in non-lab courses?",
+          0.9501
+        ],
+        [
+          "What is the minimum attendance for undergraduate programs?",
+          "What is the minimum attendance for graduate programs?",
+          0.9244
+        ]
+      ]
+    },
+    {
+      "threshold": 0.88,
+      "false_hits": 5,
+      "true_hits": 5,
+      "paraphrases": 6,
+      "false_hit_examples": [
+        [
+          "What is the deadline to withdraw from a course?",
+          "What is the deadline to drop a course?",
+          0.895
+        ],
+        [
+          "What is the deadline to withdraw from a course?",
+          "What was the deadline to withdraw from a course under the 2023 rules?",
+          0.9061
+        ],
+        [
+          "How many courses can I repeat in the summer semester?",
+          "How many courses can I register for in the summer semester?",
+          0.9125
+        ],
+        [
+          "Can I use ChatGPT in lab courses?",
+          "Can I use ChatGPT in non-lab courses?",
+          0.9501
+        ],
+        [
+          "What is the minimum attendance for undergraduate programs?",
+          "What is the minimum attendance for graduate programs?",
+          0.9244
+        ]
+      ]
+    },
+    {
+      "threshold": 0.9,
+      "false_hits": 4,
+      "true_hits": 5,
+      "paraphrases": 6,
+      "false_hit_examples": [
+        [
+          "What is the deadline to withdraw from a course?",
+          "What was the deadline to withdraw from a course under the 2023 rules?",
+          0.9061
+        ],
+        [
+          "How many courses can I repeat in the summer semester?",
+          "How many courses can I register for in the summer semester?",
+          0.9125
+        ],
+        [
+          "Can I use ChatGPT in lab courses?",
+          "Can I use ChatGPT in non-lab courses?",
+          0.9501
+        ],
+        [
+          "What is the minimum attendance for undergraduate programs?",
+          "What is the minimum attendance for graduate programs?",
+          0.9244
+        ]
+      ]
+    },
+    {
+      "threshold": 0.92,
+      "false_hits": 2,
+      "true_hits": 3,
+      "paraphrases": 6,
+      "false_hit_examples": [
+        [
+          "Can I use ChatGPT in lab courses?",
+          "Can I use ChatGPT in non-lab courses?",
+          0.9501
+        ],
+        [
+          "What is the minimum attendance for undergraduate programs?",
+          "What is the minimum attendance for graduate programs?",
+          0.9244
+        ]
+      ]
+    },
+    {
+      "threshold": 0.94,
+      "false_hits": 1,
+      "true_hits": 1,
+      "paraphrases": 6,
+      "false_hit_examples": [
+        [
+          "Can I use ChatGPT in lab courses?",
+          "Can I use ChatGPT in non-lab courses?",
+          0.9501
+        ]
+      ]
+    },
+    {
+      "threshold": 0.95,
+      "false_hits": 1,
+      "true_hits": 0,
+      "paraphrases": 6,
+      "false_hit_examples": [
+        [
+          "Can I use ChatGPT in lab courses?",
+          "Can I use ChatGPT in non-lab courses?",
+          0.9501
+        ]
+      ]
+    },
+    {
+      "threshold": 0.96,
+      "false_hits": 0,
+      "true_hits": 0,
+      "paraphrases": 6,
+      "false_hit_examples": []
+    },
+    {
+      "threshold": 0.97,
+      "false_hits": 0,
+      "true_hits": 0,
+      "paraphrases": 6,
+      "false_hit_examples": []
+    }
+  ],
+  "chosen": 0.96
+}

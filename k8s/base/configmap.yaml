@@ -19,14 +19,16 @@ data:
   CHROMA_HOST: "chroma"
   CHROMA_PORT: "8000"
   CHROMA_COLLECTION: "rahbar"
-  # --- indexing (unit: words; sweep in docs/PIPELINE.md picked 300/60) ---------------
-  CHUNK_SIZE: "300"
-  CHUNK_OVERLAP: "60"
+  # --- indexing (unit: words; the sweep in docs/PIPELINE.md picked 150/30) -----------
+  CHUNK_SIZE: "150"
+  CHUNK_OVERLAP: "30"
   CORPUS_DIR: "/corpus"
   # --- retrieval and grounding ------------------------------------------------------
   TOP_K: "5"
   HYBRID: "true"                            # lexical leg for clause numbers and codes
-  RELEVANCE_FLOOR: "0.55"                   # best cosine below this -> honest abstention
+  # Best cosine below this -> abstain without a model call. Golden answerable questions
+  # score >= 0.716; off-topic probes ("capital of France", "2022 World Cup") 0.57-0.64.
+  RELEVANCE_FLOOR: "0.66"
   # Temperature 0.2: facts and JSON want a near-deterministic decoder; 0.2 rather than 0
   # keeps a little variety in phrasing without letting the model wander off the evidence.
   TEMPERATURE: "0.2"

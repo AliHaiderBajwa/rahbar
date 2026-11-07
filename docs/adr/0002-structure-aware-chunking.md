@@ -1,4 +1,4 @@
-# ADR 0002: Structure-aware chunking at 300 words with 60 words of overlap
+# ADR 0002: Structure-aware chunking at 150 words with 30 words of overlap
 
 ## Status
 Accepted · 7 November 2026 · Taimoor, reviewed by Ali
@@ -27,10 +27,14 @@ because a chunk can span three clauses.
 
 Overlap is applied between consecutive chunks **of the same section** and never crosses a
 section boundary. Sizes are in words; nomic-embed-text's tokenizer gives about 1.3 model
-tokens per word on our text, so 300 words is about 400 model tokens.
+tokens per word on our text, so 150 words is about 200 model tokens.
 
-We measured three (size, overlap) settings plus the fixed-size baseline on recall@5 over
-the golden set; `docs/PIPELINE.md` has the table. We ship **300/60**.
+We measured three (size, overlap) settings plus the fixed-size baseline on the golden
+set (`eval/sweep_chunking.py`, table in `docs/PIPELINE.md`). All three structured
+settings reach the same recall@5 (0.868), because most sections are single clauses that
+fit in any of them; 150/30 is the only one that also reaches 0.868 at recall@3, where the
+larger chunks drop to 0.842. We ship **150/30**: the best recall@3, for 9% storage
+amplification and about 200 more vectors. The fixed-size baseline scores 0.316.
 
 ## Options considered
 * **Fixed windows** (`CHUNK_STRATEGY=fixed`, kept for the stage-B experiment): lower recall
@@ -38,6 +42,9 @@ the golden set; `docs/PIPELINE.md` has the table. We ship **300/60**.
 * **One chunk per clause, no size limit**: what we mostly get for the rules handbooks
   anyway, but the Generative AI policy and annual reports have sections of 1,000+ words
   that would blur into a single vector.
+* **300/60 or 500/100**: same recall@5, slightly worse recall@3, fewer chunks. The
+  difference is small; if indexing time mattered more than ranking, 300/60 would be the
+  choice.
 * **Semantic chunking by embedding similarity**: an extra model pass at indexing time,
   and boundaries we cannot explain in a citation.
 
