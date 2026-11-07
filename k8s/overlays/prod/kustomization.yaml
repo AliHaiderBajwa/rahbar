@@ -1,0 +1,11 @@
+# Images from Docker Hub, pinned by commit SHA. cd.yml rewrites the three tags with
+#   kustomize edit set image rahbar-api=docker.io/<user>/rahbar-api:${GITHUB_SHA} ...
+# so "what is running?" is always one commit SHA, never :latest.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+images:
+  - {name: rahbar-api, newName: docker.io/alihaiderbajwa/rahbar-api, newTag: "set-by-cd"}
+  - {name: rahbar-ui, newName: docker.io/alihaiderbajwa/rahbar-ui, newTag: "set-by-cd"}
+  - {name: rahbar-indexer, newName: docker.io/alihaiderbajwa/rahbar-indexer, newTag: "set-by-cd"}

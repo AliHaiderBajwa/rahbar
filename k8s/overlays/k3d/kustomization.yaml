@@ -1,0 +1,9 @@
+# Our laptop cluster (k3d, 3.8 GB RAM, no minikube). Same as dev, except that Ollama runs
+# as a container on the k3d Docker network (scripts/k3d-up.sh), not on the host, so it
+# never has to listen on the laptop's own interfaces.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../dev
+patches:
+  - path: config.yaml

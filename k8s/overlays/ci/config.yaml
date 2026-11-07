@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata: {name: rahbar-config, namespace: rahbar}
+data:
+  LLM_PROVIDER: "stub"
+  OLLAMA_URL: "http://host.k3d.internal:11434"
+  CORPUS_DIR: "/app/fixtures"
+  # The fixture documents are tiny (a few hundred words each), so the shipped 300-word
+  # chunks would make one chunk per document; 80/20 keeps one section per chunk.
+  CHUNK_SIZE: "80"
+  CHUNK_OVERLAP: "20"
+  # Fixture scores (eval/fixtures): the hostel question's best passage scores 0.56, every
+  # answerable question's best is >= 0.74. The stub model cannot decline on its own, so
+  # in CI the floor alone must make the must-abstain question abstain.
+  RELEVANCE_FLOOR: "0.65"
