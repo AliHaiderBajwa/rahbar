@@ -1,0 +1,85 @@
+{
+  "recall@3": 0.3333,
+  "recall@5": 0.3333,
+  "recall@5_by_type": {
+    "ordinary": 0.0,
+    "version": 0.5
+  },
+  "recall@3_by_type": {
+    "ordinary": 0.0,
+    "version": 0.5
+  },
+  "citation_validity": 1.0,
+  "citations_checked": 1,
+  "abstention_correctness": null,
+  "must_abstain_questions": 0,
+  "answer_rate_on_answerable": 0.3333,
+  "expect_in_answer_rate": 0.3333,
+  "per_question": [
+    {
+      "id": "g12",
+      "type": "ordinary",
+      "recall@3": 0.0,
+      "recall@5": 0.0,
+      "answered_from_context": false,
+      "must_abstain": false,
+      "citations": 0,
+      "citation_validity": null,
+      "expect_in_answer": false,
+      "cached": false,
+      "top_score": 0.6974,
+      "retrieved": [
+        "student-handbook-jun-2026.pdf | The National University of Computer and Emerging Sciences",
+        "annual-report-2023-24.pdf | Total 440",
+        "annual-report-2023-24.pdf | Chapter-8 Industrial Collaboration",
+        "annual-report-2023-24.pdf | Development of Faculty Mentoring Policy",
+        "annual-report-2023-24.pdf | Total 440"
+      ],
+      "seconds": 1.39
+    },
+    {
+      "id": "v01",
+      "type": "version",
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "answered_from_context": true,
+      "must_abstain": false,
+      "citations": 1,
+      "citation_validity": 1.0,
+      "expect_in_answer": true,
+      "cached": false,
+      "top_score": 0.8867,
+      "retrieved": [
+        "academic-rules-handbook-jun-2026.pdf | 4.25 Withdrawal from a Course",
+        "academic-rules-handbook-jun-2026.pdf | 4.24 Withdrawal from a Course",
+        "academic-rules-handbook-jun-2026.pdf | 4.23 Withdrawal from a Course",
+        "academic-rules-handbook-jun-2026.pdf | 6.8 B. Graduating",
+        "academic-rules-handbook-jun-2026.pdf | 4.26 Withdrawal from a Course"
+      ],
+      "seconds": 0.81
+    },
+    {
+      "id": "v03",
+      "type": "version",
+      "recall@3": 0.0,
+      "recall@5": 0.0,
+      "answered_from_context": false,
+      "must_abstain": false,
+      "citations": 0,
+      "citation_validity": null,
+      "expect_in_answer": false,
+      "cached": false,
+      "top_score": 0.8084,
+      "retrieved": [
+        "academic-rules-handbook-jun-2026.pdf | 4.25 Withdrawal from a Course",
+        "academic-rules-handbook-jun-2026.pdf | 4.23 Withdrawal from a Course",
+        "academic-rules-handbook-jun-2026.pdf | 4.24 Withdrawal from a Course",
+        "prospectus-2026-academic-rules-and-regulations.pdf | Warning",
+        "academic-rules-handbook-jun-2026.pdf | 6.8 B. Graduating"
+      ],
+      "seconds": 0.64
+    }
+  ],
+  "golden": "/tmp/claude-1000/-home-zexr-Desktop-SCD-A2/28460313-1e47-4ada-adf8-5d25885faafb/scratchpad/golden-A.yaml",
+  "questions": 3
+}

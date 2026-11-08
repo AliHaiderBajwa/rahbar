@@ -1,0 +1,16 @@
+# Laptop only: browsers resolve *.localhost to 127.0.0.1 without editing /etc/hosts, so
+# http://rahbar.localhost:8080 reaches the same Ingress as rahbar.local.
+- op: add
+  path: /spec/rules/-
+  value:
+    host: rahbar.localhost
+    http:
+      paths:
+        - path: /api
+          pathType: Prefix
+          backend:
+            service: {name: api, port: {number: 8000}}
+        - path: /
+          pathType: Prefix
+          backend:
+            service: {name: ui, port: {number: 80}}

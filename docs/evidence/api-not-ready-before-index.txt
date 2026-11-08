@@ -1,0 +1,14 @@
+$ kubectl -n rahbar get pods     # just after kubectl apply -k: the index does not exist yet
+NAME                     READY   STATUS              RESTARTS   AGE
+api-68d9d48666-69h8r     0/1     Running             0          48s
+api-68d9d48666-6nj4d     0/1     Running             0          48s
+api-68d9d48666-jlmb8     0/1     Running             0          48s
+chroma-0                 0/1     ContainerCreating   0          48s
+indexer-sx2pd            0/1     Init:0/1            0          48s
+redis-6cd5577fdd-7ff9c   0/1     ContainerCreating   0          48s
+ui-859d448b8-q28rn       1/1     Running             0          48s
+
+$ kubectl -n rahbar describe pod -l app=api | grep -A1 Readiness
+
+$ kubectl -n rahbar exec deploy/api -- python -c 'import urllib.request as u; ...' /readyz
+503 {"status":"not ready","failed":["chroma","collection","embed_model","redis"],"checks":{"chroma":"unreachable: ValueError","collection":"not checked: chroma unreachable","embed_model":"not checked: chroma unreachable","redis":"unreachable: ConnectionError"}}

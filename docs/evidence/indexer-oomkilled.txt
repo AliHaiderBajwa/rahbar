@@ -1,0 +1,20 @@
+# Q4: the indexer with its memory limit cut from 512Mi to 96Mi (a copy of CronJob/reindex), 7 Nov 2026
+$ kubectl create job --from=cronjob/reindex oom-demo -n rahbar --dry-run=client -o json | <limits.memory=96Mi> | kubectl apply -f -
+
+$ kubectl -n rahbar get pods -l job-name=oom-demo
+NAME             READY   STATUS    RESTARTS     AGE
+oom-demo-8clk6   1/1     Running   1 (5s ago)   58s
+
+$ kubectl -n rahbar describe pod/oom-demo-8clk6   (container indexer; the fetch-corpus init container completed normally)
+  indexer:
+    State:          Running
+    Last State:     Terminated
+      Reason:       OOMKilled
+      Exit Code:    137
+    Restart Count:  1
+      memory:  96Mi
+      memory:  96Mi
+
+$ kubectl -n rahbar get pod oom-demo-8clk6 -o jsonpath='{.status.containerStatuses[0].lastState.terminated}'
+{"containerID":"containerd://438cf1bb365bfc776e1c36ad570a3c1a6eb1727014ad3911215a6ed0628eabe2","exitCode":137,"finishedAt":"2026-11-07T17:25:49Z","reason":"OOMKilled","startedAt":"2026-11-07T17:25:41Z"}
+$ kubectl -n rahbar delete job oom-demo   # demo over

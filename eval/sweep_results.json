@@ -1,0 +1,1053 @@
+{
+  "original_words": 70182,
+  "runs": [
+    {
+      "strategy": "structured",
+      "size": 150,
+      "overlap": 30,
+      "chunks": 1008,
+      "stored_words": 76418,
+      "original_words": 70182,
+      "amplification": 1.089,
+      "index_seconds": 685.4,
+      "hybrid": {
+        "recall@3": 0.8684,
+        "recall@5": 0.8684,
+        "recall@5_by_type": {
+          "exact": 1.0,
+          "injection": 1.0,
+          "ordinary": 0.7917,
+          "version": 1.0
+        },
+        "per_question": [
+          {
+            "id": "g01",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g02",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g03",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g04",
+            "type": "ordinary",
+            "r3": 0.5,
+            "r5": 0.5
+          },
+          {
+            "id": "g05",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g06",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g07",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g08",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g09",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g10",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g11",
+            "type": "ordinary",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "g12",
+            "type": "ordinary",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "v01",
+            "type": "version",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "v02",
+            "type": "version",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "v03",
+            "type": "version",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "e01",
+            "type": "exact",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "e02",
+            "type": "exact",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "e03",
+            "type": "exact",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "i01",
+            "type": "injection",
+            "r3": 1.0,
+            "r5": 1.0
+          }
+        ]
+      },
+      "dense_only": {
+        "recall@3": 0.7895,
+        "recall@5": 0.8158,
+        "recall@5_by_type": {
+          "exact": 0.6667,
+          "injection": 1.0,
+          "ordinary": 0.7917,
+          "version": 1.0
+        },
+        "per_question": [
+          {
+            "id": "g01",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g02",
+            "type": "ordinary",
+            "r3": 0.5,
+            "r5": 1.0
+          },
+          {
+            "id": "g03",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g04",
+            "type": "ordinary",
+            "r3": 0.5,
+            "r5": 0.5
+          },
+          {
+            "id": "g05",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g06",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g07",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g08",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g09",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g10",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g11",
+            "type": "ordinary",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "g12",
+            "type": "ordinary",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "v01",
+            "type": "version",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "v02",
+            "type": "version",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "v03",
+            "type": "version",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "e01",
+            "type": "exact",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "e02",
+            "type": "exact",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "e03",
+            "type": "exact",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "i01",
+            "type": "injection",
+            "r3": 1.0,
+            "r5": 1.0
+          }
+        ]
+      }
+    },
+    {
+      "strategy": "structured",
+      "size": 300,
+      "overlap": 60,
+      "chunks": 812,
+      "stored_words": 71870,
+      "original_words": 70182,
+      "amplification": 1.024,
+      "index_seconds": 516.5,
+      "hybrid": {
+        "recall@3": 0.8421,
+        "recall@5": 0.8684,
+        "recall@5_by_type": {
+          "exact": 1.0,
+          "injection": 1.0,
+          "ordinary": 0.7917,
+          "version": 1.0
+        },
+        "per_question": [
+          {
+            "id": "g01",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g02",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g03",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g04",
+            "type": "ordinary",
+            "r3": 0.5,
+            "r5": 0.5
+          },
+          {
+            "id": "g05",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g06",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g07",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g08",
+            "type": "ordinary",
+            "r3": 0.5,
+            "r5": 1.0
+          },
+          {
+            "id": "g09",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g10",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g11",
+            "type": "ordinary",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "g12",
+            "type": "ordinary",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "v01",
+            "type": "version",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "v02",
+            "type": "version",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "v03",
+            "type": "version",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "e01",
+            "type": "exact",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "e02",
+            "type": "exact",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "e03",
+            "type": "exact",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "i01",
+            "type": "injection",
+            "r3": 1.0,
+            "r5": 1.0
+          }
+        ]
+      },
+      "dense_only": {
+        "recall@3": 0.7632,
+        "recall@5": 0.8158,
+        "recall@5_by_type": {
+          "exact": 0.6667,
+          "injection": 1.0,
+          "ordinary": 0.7917,
+          "version": 1.0
+        },
+        "per_question": [
+          {
+            "id": "g01",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g02",
+            "type": "ordinary",
+            "r3": 0.5,
+            "r5": 1.0
+          },
+          {
+            "id": "g03",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g04",
+            "type": "ordinary",
+            "r3": 0.5,
+            "r5": 0.5
+          },
+          {
+            "id": "g05",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g06",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g07",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g08",
+            "type": "ordinary",
+            "r3": 0.5,
+            "r5": 1.0
+          },
+          {
+            "id": "g09",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g10",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g11",
+            "type": "ordinary",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "g12",
+            "type": "ordinary",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "v01",
+            "type": "version",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "v02",
+            "type": "version",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "v03",
+            "type": "version",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "e01",
+            "type": "exact",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "e02",
+            "type": "exact",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "e03",
+            "type": "exact",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "i01",
+            "type": "injection",
+            "r3": 1.0,
+            "r5": 1.0
+          }
+        ]
+      }
+    },
+    {
+      "strategy": "structured",
+      "size": 500,
+      "overlap": 100,
+      "chunks": 758,
+      "stored_words": 68957,
+      "original_words": 70182,
+      "amplification": 0.983,
+      "index_seconds": 490.4,
+      "hybrid": {
+        "recall@3": 0.8421,
+        "recall@5": 0.8684,
+        "recall@5_by_type": {
+          "exact": 1.0,
+          "injection": 1.0,
+          "ordinary": 0.7917,
+          "version": 1.0
+        },
+        "per_question": [
+          {
+            "id": "g01",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g02",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g03",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g04",
+            "type": "ordinary",
+            "r3": 0.5,
+            "r5": 0.5
+          },
+          {
+            "id": "g05",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g06",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g07",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g08",
+            "type": "ordinary",
+            "r3": 0.5,
+            "r5": 1.0
+          },
+          {
+            "id": "g09",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g10",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g11",
+            "type": "ordinary",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "g12",
+            "type": "ordinary",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "v01",
+            "type": "version",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "v02",
+            "type": "version",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "v03",
+            "type": "version",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "e01",
+            "type": "exact",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "e02",
+            "type": "exact",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "e03",
+            "type": "exact",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "i01",
+            "type": "injection",
+            "r3": 1.0,
+            "r5": 1.0
+          }
+        ]
+      },
+      "dense_only": {
+        "recall@3": 0.7632,
+        "recall@5": 0.8158,
+        "recall@5_by_type": {
+          "exact": 0.6667,
+          "injection": 1.0,
+          "ordinary": 0.7917,
+          "version": 1.0
+        },
+        "per_question": [
+          {
+            "id": "g01",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g02",
+            "type": "ordinary",
+            "r3": 0.5,
+            "r5": 1.0
+          },
+          {
+            "id": "g03",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g04",
+            "type": "ordinary",
+            "r3": 0.5,
+            "r5": 0.5
+          },
+          {
+            "id": "g05",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g06",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g07",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g08",
+            "type": "ordinary",
+            "r3": 0.5,
+            "r5": 1.0
+          },
+          {
+            "id": "g09",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g10",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g11",
+            "type": "ordinary",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "g12",
+            "type": "ordinary",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "v01",
+            "type": "version",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "v02",
+            "type": "version",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "v03",
+            "type": "version",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "e01",
+            "type": "exact",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "e02",
+            "type": "exact",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "e03",
+            "type": "exact",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "i01",
+            "type": "injection",
+            "r3": 1.0,
+            "r5": 1.0
+          }
+        ]
+      }
+    },
+    {
+      "strategy": "fixed",
+      "size": 100,
+      "overlap": 0,
+      "chunks": 655,
+      "stored_words": 67427,
+      "original_words": 70182,
+      "amplification": 0.961,
+      "index_seconds": 507.6,
+      "hybrid": {
+        "recall@3": 0.2105,
+        "recall@5": 0.3158,
+        "recall@5_by_type": {
+          "exact": 0.6667,
+          "injection": 1.0,
+          "ordinary": 0.25,
+          "version": 0.0
+        },
+        "per_question": [
+          {
+            "id": "g01",
+            "type": "ordinary",
+            "r3": 0.5,
+            "r5": 0.5
+          },
+          {
+            "id": "g02",
+            "type": "ordinary",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "g03",
+            "type": "ordinary",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "g04",
+            "type": "ordinary",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "g05",
+            "type": "ordinary",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "g06",
+            "type": "ordinary",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "g07",
+            "type": "ordinary",
+            "r3": 0.5,
+            "r5": 0.5
+          },
+          {
+            "id": "g08",
+            "type": "ordinary",
+            "r3": 0.5,
+            "r5": 1.0
+          },
+          {
+            "id": "g09",
+            "type": "ordinary",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "g10",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g11",
+            "type": "ordinary",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "g12",
+            "type": "ordinary",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "v01",
+            "type": "version",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "v02",
+            "type": "version",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "v03",
+            "type": "version",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "e01",
+            "type": "exact",
+            "r3": 0.0,
+            "r5": 1.0
+          },
+          {
+            "id": "e02",
+            "type": "exact",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "e03",
+            "type": "exact",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "i01",
+            "type": "injection",
+            "r3": 0.5,
+            "r5": 1.0
+          }
+        ]
+      },
+      "dense_only": {
+        "recall@3": 0.2105,
+        "recall@5": 0.2632,
+        "recall@5_by_type": {
+          "exact": 0.3333,
+          "injection": 1.0,
+          "ordinary": 0.25,
+          "version": 0.0
+        },
+        "per_question": [
+          {
+            "id": "g01",
+            "type": "ordinary",
+            "r3": 0.5,
+            "r5": 0.5
+          },
+          {
+            "id": "g02",
+            "type": "ordinary",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "g03",
+            "type": "ordinary",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "g04",
+            "type": "ordinary",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "g05",
+            "type": "ordinary",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "g06",
+            "type": "ordinary",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "g07",
+            "type": "ordinary",
+            "r3": 0.5,
+            "r5": 0.5
+          },
+          {
+            "id": "g08",
+            "type": "ordinary",
+            "r3": 0.5,
+            "r5": 1.0
+          },
+          {
+            "id": "g09",
+            "type": "ordinary",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "g10",
+            "type": "ordinary",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "g11",
+            "type": "ordinary",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "g12",
+            "type": "ordinary",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "v01",
+            "type": "version",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "v02",
+            "type": "version",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "v03",
+            "type": "version",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "e01",
+            "type": "exact",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "e02",
+            "type": "exact",
+            "r3": 1.0,
+            "r5": 1.0
+          },
+          {
+            "id": "e03",
+            "type": "exact",
+            "r3": 0.0,
+            "r5": 0.0
+          },
+          {
+            "id": "i01",
+            "type": "injection",
+            "r3": 0.5,
+            "r5": 1.0
+          }
+        ]
+      }
+    }
+  ]
+}

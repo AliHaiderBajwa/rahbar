@@ -1,0 +1,19 @@
+# PR #1 deliberately sets RELEVANCE_FLOOR 0 in the CI overlay. Run: https://github.com/AliHaiderBajwa/rahbar/actions/runs/42392146326
+$ gh pr checks 1
+SonarCloud Code Analysis	fail
+e2e-eval	fail
+build	pass
+lint	pass
+manifests	pass
+scan (api)	pass
+scan (indexer)	pass
+scan (ui)	pass
+test	pass
+
+$ gh pr view 1 --json mergeStateStatus
+BLOCKED
+
+# e2e-eval log:
+GATE FAILED
+  - abstention correctness 0%: must-abstain questions answered from context: f05
+##[error]Process completed with exit code 1.

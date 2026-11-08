@@ -1,0 +1,10 @@
+# minikube on a laptop (README "From a clean clone"): images built locally by
+# `make images` and loaded with `minikube image load`; Ollama on the host.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+images:
+  - {name: rahbar-api, newTag: dev}
+  - {name: rahbar-ui, newTag: dev}
+  - {name: rahbar-indexer, newTag: dev}

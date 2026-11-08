@@ -1,0 +1,9 @@
+filter=off | Q: When is the last day to withdraw from a course? | A: The last day to withdraw from a course is the last day of the makeup week of every semester. | cites [('academic-rules-h', '4.25 Withd')] | top3 ['undergraduat:4.25 ', 'academic-rul:4.25 ', 'academic-rul:6.8 B']
+filter=off | Q: How long is the summer semester? | A: The summer semester lasts 8 weeks. | cites [('prospectus-2026-', '19 Rules f'), ('academic-rules-h', '6.1 Rules ')] | top3 ['undergraduat:6 Rul', 'prospectus-2:19 Ru', 'academic-rul:6.1 R']
+
+Retrieval only (api/app/retrieval/chroma.py, ChromaRetriever.retrieve on the shipped index):
+"When is the last day to withdraw from a course?"
+  SUPERSEDED_FILTER=on : [academic-rules-handbook-jun-2026.pdf 4.25, ... 6.8, ... 4.26]   (no 2023 chunk)
+  SUPERSEDED_FILTER=off: [undergraduate-academic-rules-aug-2023.pdf 4.25 (0.865, superseded=True),
+                          academic-rules-handbook-jun-2026.pdf 4.25 (0.861), ... 6.8]
+"How long is the summer semester?" (filter off): rank 1 = 2023 "6 Rules for Summer Semester" (0.867)

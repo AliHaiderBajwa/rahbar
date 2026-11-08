@@ -1,0 +1,26 @@
+$ kubectl -n rahbar patch configmap rahbar-config --type merge -p '{"data":{"EMBED_MODEL":"all-minilm"}}'
+configmap/rahbar-config patched
+$ kubectl -n rahbar rollout restart deploy/api     # the api only; the index is NOT rebuilt
+deployment.apps/api restarted
+
+$ kubectl -n rahbar get pods -l app=api
+NAME                   READY   STATUS    RESTARTS   AGE
+api-68d9d48666-6nj4d   1/1     Running   0          32m
+api-68d9d48666-jlmb8   1/1     Running   0          32m
+api-68d9d48666-rdc5h   1/1     Running   0          8m8s
+api-6f4f564c7-w4tp2    0/1     Running   0          50s
+
+$ kubectl -n rahbar rollout status deploy/api --timeout=20s
+Waiting for deployment "api" rollout to finish: 1 out of 3 new replicas have been updated...
+error: timed out waiting for the condition
+
+$ kubectl -n rahbar logs api-6f4f564c7-w4tp2 | grep -i mismatch
+{"ts": "2026-11-07T17:02:21Z", "level": "ERROR", "logger": "rahbar.api", "msg": "embedding model mismatch: refusing to become ready", "request_id": "-", "conflict": "embedding model mismatch: collection 'rahbar' was indexed with embed_model='nomic-embed-text' (dimension=768) but this API has EMBED_MODEL='all-minilm'", "api_embed_model": "all-minilm"}
+{"ts": "2026-11-07T17:02:22Z", "level": "ERROR", "logger": "rahbar.health", "msg": "not ready: embedding pin", "request_id": "9830259acb784f318931cbd1c0f2e4d3", "conflict": "embedding model mismatch: collection 'rahbar' was indexed with embed_model='nomic-embed-text' (dimension=768) but this API has EMBED_MODEL='all-minilm'"}
+
+$ kubectl -n rahbar describe pod api-6f4f564c7-w4tp2 | grep 'Readiness probe failed'
+  Warning  Unhealthy  3s (x8 over 64s)   kubelet            spec.containers{api}: Readiness probe failed: HTTP probe failed with statuscode: 503
+
+# users are still served by the old pods (maxUnavailable: 0):
+POST /api/ask -> HTTP 200
+# reverted: EMBED_MODEL back to nomic-embed-text, rollout restart, all pods ready again

@@ -1,0 +1,2 @@
+# No download in CI: the fixtures are in the image. Drop the fetch-corpus init container.
+- {op: remove, path: /spec/template/spec/initContainers}

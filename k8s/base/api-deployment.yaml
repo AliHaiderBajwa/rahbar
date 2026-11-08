@@ -1,0 +1,85 @@
+# The api: reads the index on every question, never writes it (ADR 0001).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  namespace: rahbar
+  labels: {app: api, app.kubernetes.io/part-of: rahbar}
+spec:
+  replicas: 3
+  revisionHistoryLimit: 5
+  selector:
+    matchLabels: {app: api}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1          # one new pod at a time ...
+      maxUnavailable: 0    # ... and never fewer than 3 ready pods during a rollout
+  template:
+    metadata:
+      labels: {app: api, app.kubernetes.io/part-of: rahbar}
+    spec:
+      serviceAccountName: api
+      enableServiceLinks: false
+      automountServiceAccountToken: false
+      # preStop sleeps 5 s so the endpoint is removed from the Service before uvicorn
+      # stops accepting connections; uvicorn then gets 20 s to finish in-flight answers.
+      terminationGracePeriodSeconds: 30
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        seccompProfile: {type: RuntimeDefault}
+      containers:
+        - name: api
+          image: rahbar-api
+          imagePullPolicy: IfNotPresent
+          ports:
+            - {name: http, containerPort: 8000}
+          envFrom:
+            - configMapRef: {name: rahbar-config}
+          env:
+            - name: LLM_API_KEY
+              valueFrom:
+                secretKeyRef: {name: rahbar-secret, key: LLM_API_KEY, optional: true}
+          # From `kubectl top` (docs/evidence/kubectl-top.txt, hpa-scale-up-under-load.txt):
+          # idle 4-5m and 66-89Mi; 9-10m while answering through Groq; ~200m for a few
+          # seconds at start-up; 75m per pod under CPU load. Request 50m sits between
+          # normal answering and real load, so the HPA's 70% (35m) means "unusually busy".
+          # Memory: request 128Mi covers the 89Mi peak; limit 256Mi is ~3x it.
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - {name: tmp, mountPath: /tmp}
+          startupProbe:          # finished booting? liveness and readiness wait for it
+            httpGet: {path: /healthz, port: 8000}
+            failureThreshold: 30
+            periodSeconds: 2
+          livenessProbe:         # still working? failure -> the kubelet restarts it
+            httpGet: {path: /healthz, port: 8000}
+            periodSeconds: 20
+            failureThreshold: 3
+            timeoutSeconds: 2
+          readinessProbe:        # can it take traffic? failure -> out of the Service
+            httpGet: {path: /readyz, port: 8000}
+            periodSeconds: 10
+            failureThreshold: 3
+            timeoutSeconds: 5
+          lifecycle:
+            preStop:
+              exec:
+                command: ["python", "-c", "import time; time.sleep(5)"]
+      volumes:
+        - name: tmp
+          emptyDir: {sizeLimit: 64Mi}

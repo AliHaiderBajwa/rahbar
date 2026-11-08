@@ -1,0 +1,16 @@
+# PR #1, second commit restores RELEVANCE_FLOOR 0.65. Run: https://github.com/AliHaiderBajwa/rahbar/actions/runs/42394651962
+$ gh pr checks 1
+SonarCloud Code Analysis	fail
+build	pass
+e2e-eval	pass
+lint	pass
+manifests	pass
+scan (api)	pass
+scan (indexer)	pass
+scan (ui)	pass
+test	pass
+
+$ gh pr view 1 --json mergeStateStatus,reviewDecision
+BLOCKED (review: REVIEW_REQUIRED)
+# all required checks pass; the merge is still blocked until one approving review (branch protection).
+# (SonarCloud is an app on the account, not part of this repo's CI, and not a required check.)

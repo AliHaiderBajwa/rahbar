@@ -1,0 +1,2 @@
+$ gh api repos/AliHaiderBajwa/rahbar/branches/main/protection   (7 Nov 2026)
+{"allow_deletions":false,"allow_force_pushes":false,"dismiss_stale_reviews":true,"enforce_admins":true,"required_approving_reviews":1,"required_status_checks":["lint","test","manifests","build","e2e-eval","scan (api)","scan (ui)","scan (indexer)"],"strict":false}

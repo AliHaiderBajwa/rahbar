@@ -1,0 +1,19 @@
+# The ephemeral k3d cluster in ci.yml (e2e-eval) and cd.yml (deploy).
+# - indexes the 3-document fixture corpus baked into the indexer image (no download)
+# - uses the stub LLM provider: no key, no network, deterministic (section 6)
+# - embeds with nomic-embed-text through Ollama on the runner (host.k3d.internal)
+# The image names are rewritten by the workflow with `kustomize edit set image`.
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ../../base
+patches:
+  - path: config.yaml
+  - path: fixture-corpus.yaml
+    target: {kind: Job, name: indexer}
+  - path: fixture-corpus-cron.yaml
+    target: {kind: CronJob, name: reindex}
+images:
+  - {name: rahbar-api, newTag: ci}
+  - {name: rahbar-ui, newTag: ci}
+  - {name: rahbar-indexer, newTag: ci}

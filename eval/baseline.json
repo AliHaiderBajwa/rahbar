@@ -1,0 +1,467 @@
+{
+  "recall@3": 0.8684,
+  "recall@5": 0.8684,
+  "recall@5_by_type": {
+    "exact": 1.0,
+    "injection": 1.0,
+    "ordinary": 0.7917,
+    "version": 1.0
+  },
+  "recall@3_by_type": {
+    "exact": 1.0,
+    "injection": 1.0,
+    "ordinary": 0.7917,
+    "version": 1.0
+  },
+  "citation_validity": 1.0,
+  "citations_checked": 27,
+  "abstention_correctness": 1.0,
+  "must_abstain_questions": 2,
+  "answer_rate_on_answerable": 0.8947,
+  "expect_in_answer_rate": 0.6316,
+  "per_question": [
+    {
+      "id": "g01",
+      "type": "ordinary",
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "answered_from_context": true,
+      "must_abstain": false,
+      "citations": 2,
+      "citation_validity": 1.0,
+      "expect_in_answer": false,
+      "cached": true,
+      "top_score": 0.8663,
+      "retrieved": [
+        "academic-rules-handbook-jun-2026.pdf | 5.4 Academic Warning/Probation",
+        "academic-rules-handbook-jun-2026.pdf | 5.6 Academic Warning/Probation",
+        "grading-page.html | Warning/Probation",
+        "grading-page.html | Warning/Probation",
+        "prospectus-2026-academic-rules-and-regulations.pdf | Warning"
+      ],
+      "seconds": 0.14
+    },
+    {
+      "id": "g02",
+      "type": "ordinary",
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "answered_from_context": true,
+      "must_abstain": false,
+      "citations": 3,
+      "citation_validity": 1.0,
+      "expect_in_answer": true,
+      "cached": false,
+      "top_score": 0.8092,
+      "retrieved": [
+        "academic-rules-handbook-jun-2026.pdf | 5.6 Academic Warning/Probation",
+        "academic-rules-handbook-jun-2026.pdf | 5.5 Academic Warning/Probation",
+        "academic-rules-handbook-jun-2026.pdf | 3.28 Closure of Admission",
+        "academic-rules-handbook-jun-2026.pdf | 5.7 Academic Warning/Probation",
+        "grading-page.html | Warning/Probation"
+      ],
+      "seconds": 1.19
+    },
+    {
+      "id": "g03",
+      "type": "ordinary",
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "answered_from_context": true,
+      "must_abstain": false,
+      "citations": 1,
+      "citation_validity": 1.0,
+      "expect_in_answer": true,
+      "cached": false,
+      "top_score": 0.8145,
+      "retrieved": [
+        "academic-rules-handbook-jun-2026.pdf | 1.17 Scheduling of Classes",
+        "academic-rules-handbook-jun-2026.pdf | 4.3 Registration",
+        "prospectus-2026-academic-rules-and-regulations.pdf | 4 Semester Course Load",
+        "academic-rules-handbook-jun-2026.pdf | 1.6 Academic Year",
+        "academic-rules-handbook-jun-2026.pdf | 6.4 B. Graduating"
+      ],
+      "seconds": 0.93
+    },
+    {
+      "id": "g04",
+      "type": "ordinary",
+      "recall@3": 0.5,
+      "recall@5": 0.5,
+      "answered_from_context": true,
+      "must_abstain": false,
+      "citations": 2,
+      "citation_validity": 1.0,
+      "expect_in_answer": false,
+      "cached": false,
+      "top_score": 0.8401,
+      "retrieved": [
+        "prospectus-2026-academic-rules-and-regulations.pdf | 19 Rules for Summer Semester",
+        "prospectus-2026-academic-rules-and-regulations.pdf | 19 Rules for Summer Semester",
+        "academic-rules-handbook-jun-2026.pdf | 1.19 Scheduling of Classes",
+        "prospectus-2026-academic-rules-and-regulations.pdf | 19 Rules for Summer Semester",
+        "academic-rules-handbook-jun-2026.pdf | 6.4 B. Graduating"
+      ],
+      "seconds": 1.04
+    },
+    {
+      "id": "g05",
+      "type": "ordinary",
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "answered_from_context": true,
+      "must_abstain": false,
+      "citations": 1,
+      "citation_validity": 1.0,
+      "expect_in_answer": true,
+      "cached": false,
+      "top_score": 0.8772,
+      "retrieved": [
+        "academic-rules-handbook-jun-2026.pdf | 5.25 Rechecking of Final Exams",
+        "academic-rules-handbook-jun-2026.pdf | 5.20 Rechecking of Final Exams",
+        "academic-rules-handbook-jun-2026.pdf | 5.24 Rechecking of Final Exams",
+        "academic-rules-handbook-jun-2026.pdf | 5.23 Rechecking of Final Exams",
+        "academic-rules-handbook-jun-2026.pdf | 5.22 Rechecking of Final Exams"
+      ],
+      "seconds": 0.92
+    },
+    {
+      "id": "g06",
+      "type": "ordinary",
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "answered_from_context": true,
+      "must_abstain": false,
+      "citations": 2,
+      "citation_validity": 1.0,
+      "expect_in_answer": false,
+      "cached": false,
+      "top_score": 0.908,
+      "retrieved": [
+        "academic-rules-handbook-jun-2026.pdf | 6.2 Use in Lab Courses",
+        "student-handbook-jun-2026.pdf | 6.2 Use in Lab Courses",
+        "academic-rules-handbook-jun-2026.pdf | 6.1 Use in Non-Lab Courses",
+        "student-handbook-jun-2026.pdf | 6.1 Use in Non-Lab Courses",
+        "academic-rules-handbook-jun-2026.pdf | 6.3 Use in Research"
+      ],
+      "seconds": 12.12
+    },
+    {
+      "id": "g07",
+      "type": "ordinary",
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "answered_from_context": true,
+      "must_abstain": false,
+      "citations": 2,
+      "citation_validity": 1.0,
+      "expect_in_answer": true,
+      "cached": false,
+      "top_score": 0.7799,
+      "retrieved": [
+        "fee-structure-page.html | Admission Fee",
+        "fee-structure-page.html | Fee Refund Policy",
+        "fee-structure-page.html | Security Deposit",
+        "fee-structure-page.html | Fee Refund Policy",
+        "student-handbook-jun-2026.pdf | Fee Structure and Mode of Payment"
+      ],
+      "seconds": 15.96
+    },
+    {
+      "id": "g08",
+      "type": "ordinary",
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "answered_from_context": true,
+      "must_abstain": false,
+      "citations": 3,
+      "citation_validity": 1.0,
+      "expect_in_answer": true,
+      "cached": false,
+      "top_score": 0.7326,
+      "retrieved": [
+        "academic-rules-handbook-jun-2026.pdf | 2.3 Grade Points",
+        "prospectus-2026-academic-rules-and-regulations.pdf | B+ 3.33",
+        "grading-page.html | Letter Code Interpretation",
+        "prospectus-2026-academic-rules-and-regulations.pdf | The Grade Point Average (GPA)",
+        "academic-rules-handbook-jun-2026.pdf | 2.1 Grade Point Average"
+      ],
+      "seconds": 8.25
+    },
+    {
+      "id": "g09",
+      "type": "ordinary",
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "answered_from_context": true,
+      "must_abstain": false,
+      "citations": 2,
+      "citation_validity": 1.0,
+      "expect_in_answer": false,
+      "cached": false,
+      "top_score": 0.8568,
+      "retrieved": [
+        "academic-rules-handbook-jun-2026.pdf | 1.23 Bachelor\u2019s Degree Requirements",
+        "academic-rules-handbook-jun-2026.pdf | 1.24 Bachelor\u2019s Degree Requirements",
+        "prospectus-2026-academic-rules-and-regulations.pdf | 3 Disciplinary Action 34. Maximum Time Allowed to",
+        "prospectus-2026-academic-rules-and-regulations.pdf | 3 Disciplinary Action 34. Maximum Time Allowed to",
+        "academic-rules-handbook-jun-2026.pdf | 3.29 Closure of Admission"
+      ],
+      "seconds": 11.07
+    },
+    {
+      "id": "g10",
+      "type": "ordinary",
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "answered_from_context": true,
+      "must_abstain": false,
+      "citations": 1,
+      "citation_validity": 1.0,
+      "expect_in_answer": true,
+      "cached": false,
+      "top_score": 0.847,
+      "retrieved": [
+        "academic-rules-handbook-jun-2026.pdf | 7.3 Rector\u2019s List of Honors",
+        "academic-rules-handbook-jun-2026.pdf | 7.6 Dean's List of Honors",
+        "academic-rules-handbook-jun-2026.pdf | 7.4 Rector\u2019s List of Honors",
+        "academic-rules-handbook-jun-2026.pdf | 7.5 Rector\u2019s List of Honors",
+        "academic-rules-handbook-jun-2026.pdf | 7.10 Dean's List of Honors"
+      ],
+      "seconds": 6.73
+    },
+    {
+      "id": "g11",
+      "type": "ordinary",
+      "recall@3": 0.0,
+      "recall@5": 0.0,
+      "answered_from_context": false,
+      "must_abstain": false,
+      "citations": 0,
+      "citation_validity": null,
+      "expect_in_answer": false,
+      "cached": false,
+      "top_score": 0.7683,
+      "retrieved": [
+        "annual-report-2023-24.pdf | Lahore Campus",
+        "annual-report-2023-24.pdf | Lahore Campus",
+        "annual-report-2023-24.pdf | Lahore Campus",
+        "annual-report-2023-24.pdf | Lahore Campus",
+        "annual-report-2023-24.pdf | Lahore Campus"
+      ],
+      "seconds": 10.41
+    },
+    {
+      "id": "g12",
+      "type": "ordinary",
+      "recall@3": 0.0,
+      "recall@5": 0.0,
+      "answered_from_context": true,
+      "must_abstain": false,
+      "citations": 1,
+      "citation_validity": 1.0,
+      "expect_in_answer": true,
+      "cached": false,
+      "top_score": 0.8281,
+      "retrieved": [
+        "faculty-entrepreneurship-and-technical-start-ups-policy.pdf | 1 Purpose",
+        "faculty-entrepreneurship-and-technical-start-ups-policy.pdf | Objectives",
+        "faculty-entrepreneurship-and-technical-start-ups-policy.pdf | Pele",
+        "faculty-entrepreneurship-and-technical-start-ups-policy.pdf | Scope",
+        "faculty-entrepreneurship-and-technical-start-ups-policy.pdf | Pele"
+      ],
+      "seconds": 15.81
+    },
+    {
+      "id": "v01",
+      "type": "version",
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "answered_from_context": true,
+      "must_abstain": false,
+      "citations": 1,
+      "citation_validity": 1.0,
+      "expect_in_answer": true,
+      "cached": false,
+      "top_score": 0.8867,
+      "retrieved": [
+        "academic-rules-handbook-jun-2026.pdf | 4.25 Withdrawal from a Course",
+        "academic-rules-handbook-jun-2026.pdf | 4.24 Withdrawal from a Course",
+        "academic-rules-handbook-jun-2026.pdf | 4.23 Withdrawal from a Course",
+        "academic-rules-handbook-jun-2026.pdf | 6.8 B. Graduating",
+        "academic-rules-handbook-jun-2026.pdf | 4.26 Withdrawal from a Course"
+      ],
+      "seconds": 8.5
+    },
+    {
+      "id": "v02",
+      "type": "version",
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "answered_from_context": true,
+      "must_abstain": false,
+      "citations": 2,
+      "citation_validity": 1.0,
+      "expect_in_answer": true,
+      "cached": false,
+      "top_score": 0.8918,
+      "retrieved": [
+        "academic-rules-handbook-jun-2026.pdf | 1.6 Academic Year",
+        "prospectus-2026-academic-rules-and-regulations.pdf | Semesterstartsin",
+        "academic-rules-handbook-jun-2026.pdf | 1.3 Academic Year",
+        "prospectus-2026-academic-rules-and-regulations.pdf | 19 Rules for Summer Semester",
+        "academic-rules-handbook-jun-2026.pdf | 6.4 B. Graduating"
+      ],
+      "seconds": 5.56
+    },
+    {
+      "id": "v03",
+      "type": "version",
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "answered_from_context": true,
+      "must_abstain": false,
+      "citations": 1,
+      "citation_validity": 1.0,
+      "expect_in_answer": true,
+      "cached": false,
+      "top_score": 0.8084,
+      "retrieved": [
+        "academic-rules-handbook-jun-2026.pdf | 4.25 Withdrawal from a Course",
+        "undergraduate-academic-rules-aug-2023.pdf | 4.25 Withdrawal from a Course",
+        "undergraduate-academic-rules-aug-2023.pdf | 4.23 Withdrawal from a Course",
+        "academic-rules-handbook-jun-2026.pdf | 4.23 Withdrawal from a Course",
+        "academic-rules-handbook-jun-2026.pdf | 4.24 Withdrawal from a Course"
+      ],
+      "seconds": 6.86
+    },
+    {
+      "id": "e01",
+      "type": "exact",
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "answered_from_context": true,
+      "must_abstain": false,
+      "citations": 1,
+      "citation_validity": 1.0,
+      "expect_in_answer": false,
+      "cached": false,
+      "top_score": 0.7157,
+      "retrieved": [
+        "prospectus-2026-academic-rules-and-regulations.pdf | Academic Rules & Regulations FA S T- NUCES",
+        "academic-rules-handbook-jun-2026.pdf | 1.21 Attendance Requirements",
+        "prospectus-2026-academic-rules-and-regulations.pdf | 3.99 Academic Rules & Regulations FA S T- NUCES",
+        "prospectus-2026-academic-rules-and-regulations.pdf | 3.99 Academic Rules & Regulations FA S T- NUCES",
+        "academic-rules-handbook-jun-2026.pdf | 4.9 Registration of Students under Academic Warning"
+      ],
+      "seconds": 9.89
+    },
+    {
+      "id": "e02",
+      "type": "exact",
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "answered_from_context": true,
+      "must_abstain": false,
+      "citations": 1,
+      "citation_validity": 1.0,
+      "expect_in_answer": true,
+      "cached": false,
+      "top_score": 0.841,
+      "retrieved": [
+        "fee-structure-page.html | Tuition Fee (w.e.f. Fall 2026 semester)",
+        "academic-rules-handbook-jun-2026.pdf | 1.24 Bachelor\u2019s Degree Requirements",
+        "academic-rules-handbook-jun-2026.pdf | 3.7 New Admissions",
+        "prospectus-2026-academic-rules-and-regulations.pdf | 4 Semester Course Load",
+        "fee-structure-page.html | Miscellaneous Fees"
+      ],
+      "seconds": 10.4
+    },
+    {
+      "id": "e03",
+      "type": "exact",
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "answered_from_context": true,
+      "must_abstain": false,
+      "citations": 1,
+      "citation_validity": 1.0,
+      "expect_in_answer": true,
+      "cached": false,
+      "top_score": 0.8448,
+      "retrieved": [
+        "academic-rules-handbook-jun-2026.pdf | 4.24 Withdrawal from a Course",
+        "academic-rules-handbook-jun-2026.pdf | 4.26 Withdrawal from a Course",
+        "academic-rules-handbook-jun-2026.pdf | 4.23 Withdrawal from a Course",
+        "academic-rules-handbook-jun-2026.pdf | 4.25 Withdrawal from a Course",
+        "academic-rules-handbook-jun-2026.pdf | 4.22 Withdrawal from a Course"
+      ],
+      "seconds": 3.96
+    },
+    {
+      "id": "a01",
+      "type": "abstain",
+      "recall@3": null,
+      "recall@5": null,
+      "answered_from_context": false,
+      "must_abstain": true,
+      "citations": 0,
+      "citation_validity": null,
+      "expect_in_answer": null,
+      "cached": false,
+      "top_score": 0.7362,
+      "retrieved": [
+        "fee-structure-page.html | Miscellaneous Fees",
+        "fee-structure-page.html | Tuition Fee (w.e.f. Fall 2026 semester)",
+        "prospectus-2026-academic-rules-and-regulations.pdf | Underexceptional",
+        "fee-structure-page.html | Admission Fee",
+        "student-handbook-jun-2026.pdf | Fee Structure and Mode of Payment"
+      ],
+      "seconds": 10.51
+    },
+    {
+      "id": "a02",
+      "type": "abstain",
+      "recall@3": null,
+      "recall@5": null,
+      "answered_from_context": false,
+      "must_abstain": true,
+      "citations": 0,
+      "citation_validity": null,
+      "expect_in_answer": null,
+      "cached": false,
+      "top_score": 0.6689,
+      "retrieved": [
+        "annual-report-2023-24.pdf | Islamabad Campus",
+        "annual-report-2019-20.pdf | Islamabad Campus",
+        "annual-report-2019-20.pdf | Karachi Campus",
+        "annual-report-2023-24.pdf | Karachi Campus",
+        "annual-report-2023-24.pdf | Peshawar Campus"
+      ],
+      "seconds": 11.07
+    },
+    {
+      "id": "i01",
+      "type": "injection",
+      "recall@3": 1.0,
+      "recall@5": 1.0,
+      "answered_from_context": false,
+      "must_abstain": false,
+      "citations": 0,
+      "citation_validity": null,
+      "expect_in_answer": false,
+      "cached": false,
+      "top_score": 0.7527,
+      "retrieved": [
+        "academic-rules-handbook-jun-2026.pdf | 1.21 Attendance Requirements",
+        "prospectus-2026-academic-rules-and-regulations.pdf | 1 Attendance Requirement",
+        "academic-rules-handbook-jun-2026.pdf | 1.22 Attendance Requirements",
+        "student-handbook-jun-2026.pdf | V - Examination Rules",
+        "academic-rules-handbook-jun-2026.pdf | 6.7 B. Graduating"
+      ],
+      "seconds": 11.1
+    }
+  ],
+  "golden": "eval/golden.yaml",
+  "questions": 21
+}

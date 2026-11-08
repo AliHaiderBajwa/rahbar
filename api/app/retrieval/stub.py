@@ -7,6 +7,7 @@ Switch to RETRIEVER=chroma in the ConfigMap once your index exists.
 from __future__ import annotations
 
 from ..schemas import Passage
+from .base import IndexInfo
 
 _PASSAGES = [
     Passage(
@@ -42,5 +43,25 @@ _PASSAGES = [
 class StubRetriever:
     name = "stub"
 
-    def retrieve(self, question: str, k: int) -> list[Passage]:
-        return [p.model_copy() for p in _PASSAGES[:k]]
+    def __init__(self, passages: list[Passage] | None = None) -> None:
+        self.passages = passages if passages is not None else _PASSAGES
+
+    def embed_query(self, question: str) -> list[float] | None:
+        return None
+
+    def retrieve(self, question: str, k: int, vector: list[float] | None = None,
+                 include_superseded: bool = False) -> list[Passage]:
+        return [p.model_copy() for p in self.passages[:k]]
+
+    def index_info(self) -> IndexInfo:
+        return IndexInfo(exists=True, count=len(self.passages), embed_model=None,
+                         index_id="stub")
+
+    def current_index_id(self) -> str:
+        return "stub"
+
+    def heartbeat(self) -> None:
+        return None
+
+    def check_pin(self, info: IndexInfo | None = None) -> None:
+        return None          # the stub has no embeddings, so nothing can disagree

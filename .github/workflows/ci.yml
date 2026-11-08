@@ -1,0 +1,186 @@
+# CI: every pull request to main, and every push to dev (section 6).
+# lint -> test -> manifests run in parallel; build, scan and e2e-eval wait for them.
+# Nothing is pushed to a registry from here.
+name: ci
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [dev]
+
+permissions:
+  contents: read          # least privilege: read the code, nothing else
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: "3.12"
+  TRIVY_VERSION: v0.74.0
+  KUSTOMIZE_VERSION: v5.6.0
+  KUBECONFORM_VERSION: v0.6.7
+
+jobs:
+  lint:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "${{ env.PYTHON_VERSION }}", cache: pip}
+      - run: pip install -r api/requirements-dev.txt -r indexer/requirements-dev.txt
+      - name: ruff
+        run: ruff check api indexer eval corpus scripts
+      - name: mypy
+        run: |
+          (cd api && mypy app)
+          (cd indexer && mypy pipeline)
+
+  test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "${{ env.PYTHON_VERSION }}", cache: pip}
+      - run: pip install -r api/requirements-dev.txt -r indexer/requirements-dev.txt
+      - name: pytest api (stub provider, no network, coverage >= 60%)
+        working-directory: api
+        env: {RETRIEVER: stub, LLM_PROVIDER: stub}
+        run: pytest -q --cov=app --cov-report=term --cov-fail-under=60
+      - name: pytest indexer
+        working-directory: indexer
+        run: pytest -q --cov=pipeline --cov-report=term --cov-fail-under=60
+
+  manifests:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: install kustomize and kubeconform
+        run: |
+          curl -fsSL "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2F${KUSTOMIZE_VERSION}/kustomize_${KUSTOMIZE_VERSION}_linux_amd64.tar.gz" | tar xz -C /usr/local/bin
+          curl -fsSL "https://github.com/yannh/kubeconform/releases/download/${KUBECONFORM_VERSION}/kubeconform-linux-amd64.tar.gz" | tar xz -C /usr/local/bin kubeconform
+      - name: kustomize build | kubeconform -strict (every overlay)
+        run: |
+          for overlay in prod dev ci k3d; do
+            echo "--- $overlay"
+            kustomize build "k8s/overlays/$overlay" | kubeconform -strict -summary
+          done
+
+  build:
+    needs: [lint, test, manifests]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: build api (no push)
+        uses: docker/build-push-action@v6
+        with:
+          context: api
+          tags: rahbar-api:${{ github.sha }}
+          push: false
+          cache-from: type=gha,scope=api
+          cache-to: type=gha,mode=max,scope=api
+      - name: build ui (no push)
+        uses: docker/build-push-action@v6
+        with:
+          context: ui
+          tags: rahbar-ui:${{ github.sha }}
+          push: false
+          cache-from: type=gha,scope=ui
+          cache-to: type=gha,mode=max,scope=ui
+      - name: build indexer (no push)
+        uses: docker/build-push-action@v6
+        with:
+          context: indexer
+          build-contexts: |
+            corpus=corpus
+            fixtures=eval/fixtures
+          tags: rahbar-indexer:${{ github.sha }}
+          push: false
+          cache-from: type=gha,scope=indexer
+          cache-to: type=gha,mode=max,scope=indexer
+
+  scan:
+    needs: [build]
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        image: [api, ui, indexer]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - name: rebuild ${{ matrix.image }} from the build cache
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.image }}
+          build-contexts: |
+            corpus=corpus
+            fixtures=eval/fixtures
+          tags: rahbar-${{ matrix.image }}:${{ github.sha }}
+          load: true
+          cache-from: type=gha,scope=${{ matrix.image }}
+      - name: install Trivy (pinned release, checksum verified)
+        run: |
+          v=${TRIVY_VERSION#v}
+          base="https://github.com/aquasecurity/trivy/releases/download/${TRIVY_VERSION}"
+          curl -fsSLO "$base/trivy_${v}_Linux-64bit.tar.gz"
+          curl -fsSL "$base/trivy_${v}_checksums.txt" | grep "trivy_${v}_Linux-64bit.tar.gz" | sha256sum -c -
+          tar xzf "trivy_${v}_Linux-64bit.tar.gz" -C /usr/local/bin trivy
+      - name: Trivy (fail on HIGH/CRITICAL that have a fix available)
+        run: |
+          trivy image --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 \
+            --scanners vuln --no-progress rahbar-${{ matrix.image }}:${{ github.sha }}
+
+  e2e-eval:
+    needs: [build]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "${{ env.PYTHON_VERSION }}"}
+      - run: pip install httpx==0.28.1 pyyaml==6.0.2
+      - name: install kustomize
+        run: curl -fsSL "https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize%2F${KUSTOMIZE_VERSION}/kustomize_${KUSTOMIZE_VERSION}_linux_amd64.tar.gz" | tar xz -C /usr/local/bin
+      - uses: docker/setup-buildx-action@v3
+      - name: build api into the local daemon (from the build cache)
+        uses: docker/build-push-action@v6
+        with: {context: api, tags: "rahbar-api:${{ github.sha }}", load: true, cache-from: "type=gha,scope=api"}
+      - name: build ui into the local daemon
+        uses: docker/build-push-action@v6
+        with: {context: ui, tags: "rahbar-ui:${{ github.sha }}", load: true, cache-from: "type=gha,scope=ui"}
+      - name: build indexer into the local daemon
+        uses: docker/build-push-action@v6
+        with:
+          context: indexer
+          build-contexts: |
+            corpus=corpus
+            fixtures=eval/fixtures
+          tags: rahbar-indexer:${{ github.sha }}
+          load: true
+          cache-from: type=gha,scope=indexer
+      - name: k3d cluster, fixture index, rollout, smoke test
+        run: |
+          scripts/ci/k3d-e2e.sh rahbar-api:${{ github.sha }} rahbar-ui:${{ github.sha }} \
+            rahbar-indexer:${{ github.sha }} --import
+      - name: eval gate (section 5.4) on the fixture golden set
+        run: |
+          python eval/run_eval.py --api http://localhost:8080 --host rahbar.local \
+            --golden eval/fixtures/golden.fixture.yaml \
+            --baseline eval/fixtures/baseline.fixture.json \
+            --out eval-fixture-results.json
+      - name: keep the results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-fixture-results
+          path: eval-fixture-results.json
+          if-no-files-found: ignore
+      - name: cluster state on failure
+        if: failure()
+        run: |
+          kubectl -n rahbar get pods -o wide || true
+          kubectl -n rahbar describe pods | tail -80 || true
+          kubectl -n rahbar logs deploy/api --tail=50 || true

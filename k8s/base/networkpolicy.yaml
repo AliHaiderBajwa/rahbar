@@ -1,0 +1,145 @@
+# Deny by default, then allow only the paths in the architecture diagram (section 4.7):
+#   ingress-nginx -> ui, api        ui -> api (and DNS), nothing else
+#   api -> chroma, redis            indexer -> chroma
+#   api, indexer -> DNS, the embedding/LLM endpoints outside the cluster
+# The ui's only egress is the api, so it can never reach chroma or redis. Needs a CNI that
+# enforces policy: minikube with --cni=calico (make cluster), or k3s/k3d's built-in one.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: {name: default-deny-all, namespace: rahbar}
+spec:
+  podSelector: {}
+  policyTypes: [Ingress, Egress]
+---
+# Every pod that calls out needs DNS, or no Service name resolves.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: {name: allow-dns, namespace: rahbar}
+spec:
+  podSelector:
+    matchExpressions:
+      - {key: app, operator: In, values: [api, indexer, ui]}
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - namespaceSelector:
+            matchLabels: {kubernetes.io/metadata.name: kube-system}
+          podSelector:
+            matchLabels: {k8s-app: kube-dns}
+      ports:
+        - {protocol: UDP, port: 53}
+        - {protocol: TCP, port: 53}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: {name: ui-from-ingress, namespace: rahbar}
+spec:
+  podSelector:
+    matchLabels: {app: ui}
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels: {kubernetes.io/metadata.name: ingress-nginx}
+      ports:
+        - {protocol: TCP, port: 8080}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: {name: ui-egress-to-api, namespace: rahbar}
+spec:
+  podSelector:
+    matchLabels: {app: ui}
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - podSelector: {matchLabels: {app: api}}
+      ports:
+        - {protocol: TCP, port: 8000}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: {name: api-from-ingress-and-ui, namespace: rahbar}
+spec:
+  podSelector:
+    matchLabels: {app: api}
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels: {kubernetes.io/metadata.name: ingress-nginx}
+        - podSelector:
+            matchLabels: {app: ui}
+      ports:
+        - {protocol: TCP, port: 8000}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: {name: api-egress, namespace: rahbar}
+spec:
+  podSelector:
+    matchLabels: {app: api}
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - podSelector: {matchLabels: {app: chroma}}
+      ports:
+        - {protocol: TCP, port: 8000}
+    - to:
+        - podSelector: {matchLabels: {app: redis}}
+      ports:
+        - {protocol: TCP, port: 6379}
+    # Ollama on the host (embeddings, ollama-host mode) and the hosted LLM over HTTPS.
+    # These live outside the cluster, so they can only be named by address and port.
+    - to:
+        - ipBlock: {cidr: 0.0.0.0/0}
+      ports:
+        - {protocol: TCP, port: 11434}
+        - {protocol: TCP, port: 443}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: {name: indexer-egress, namespace: rahbar}
+spec:
+  podSelector:
+    matchLabels: {app: indexer}
+  policyTypes: [Egress]
+  egress:
+    - to:
+        - podSelector: {matchLabels: {app: chroma}}
+      ports:
+        - {protocol: TCP, port: 8000}
+    # Ollama for embeddings; nu.edu.pk over HTTP(S) for the fetch-corpus init container.
+    - to:
+        - ipBlock: {cidr: 0.0.0.0/0}
+      ports:
+        - {protocol: TCP, port: 11434}
+        - {protocol: TCP, port: 443}
+        - {protocol: TCP, port: 80}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: {name: chroma-from-api-and-indexer, namespace: rahbar}
+spec:
+  podSelector:
+    matchLabels: {app: chroma}
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - podSelector: {matchLabels: {app: api}}
+        - podSelector: {matchLabels: {app: indexer}}
+      ports:
+        - {protocol: TCP, port: 8000}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: {name: redis-from-api, namespace: rahbar}
+spec:
+  podSelector:
+    matchLabels: {app: redis}
+  policyTypes: [Ingress]
+  ingress:
+    - from:
+        - podSelector: {matchLabels: {app: api}}
+      ports:
+        - {protocol: TCP, port: 6379}

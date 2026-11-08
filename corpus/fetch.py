@@ -5,6 +5,9 @@
     python corpus/fetch.py --force               # download everything again
     python corpus/fetch.py --verify              # re-hash local files against MANIFEST.md
     python corpus/fetch.py --list URL            # list the documents linked from an index page
+    python corpus/fetch.py --dest /corpus        # the indexer Job's init container: download
+                                                 # into a volume and check every SHA-256
+                                                 # against the committed MANIFEST.md
 
 Writes:
     corpus/raw/<file>         the documents (gitignored: never commit someone else's PDFs)
@@ -92,9 +95,12 @@ def load_sources() -> list[dict]:
     return docs
 
 
-def fetch(force: bool) -> int:
+def fetch(force: bool, dest: Path | None = None) -> int:
+    global RAW
+    if dest is not None:
+        RAW = dest
     docs = load_sources()
-    RAW.mkdir(exist_ok=True)
+    RAW.mkdir(parents=True, exist_ok=True)
     index_path = RAW / "_index.json"
     previous = {e["name"]: e for e in json.loads(index_path.read_text())} \
         if index_path.exists() else {}
@@ -135,8 +141,13 @@ def fetch(force: bool) -> int:
             time.sleep(PAUSE_SECONDS)
 
     index_path.write_text(json.dumps(entries, indent=2), encoding="utf-8")
-    write_manifest(entries)
-    print(f"\n{len(entries)} documents in corpus/raw, manifest written to corpus/MANIFEST.md")
+    if dest is None:
+        write_manifest(entries)
+        print(f"\n{len(entries)} documents in corpus/raw, manifest written to corpus/MANIFEST.md")
+    else:
+        # In the cluster the manifest is read-only: compare against it instead of rewriting it.
+        changed = check_against_manifest(entries)
+        print(f"\n{len(entries)} documents in {RAW}; {changed} differ from MANIFEST.md")
     if failures:
         print(f"{len(failures)} failed; fix their URLs in sources.yaml and run again:")
         for name, reason in failures:
@@ -160,6 +171,22 @@ def write_manifest(entries: list[dict]) -> None:
         lines.append(f"| {e['name']} | {e['doc_version']} | {'yes' if e['superseded'] else 'no'} "
                      f"| `{e['file']}` | {e['bytes']:,} | `{e['sha256']}` | <{e['url']}> |")
     MANIFEST.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def check_against_manifest(entries: list[dict]) -> int:
+    """Warn (do not fail) when a fetched file differs from the committed manifest: the site
+    publishing a new revision is exactly the 'material changed' case a re-index is for."""
+    if not MANIFEST.exists():
+        print("  no MANIFEST.md to compare against")
+        return 0
+    known = dict(re.findall(r"\| `([^`]+)` \| [\d,]+ \| `([0-9a-f]{64})` \|", MANIFEST.read_text()))
+    changed = 0
+    for e in entries:
+        if known.get(e["file"]) != e["sha256"]:
+            changed += 1
+            print(f"  CHANGED {e['file']}: sha256 {e['sha256'][:12]} is not the manifest's "
+                  f"{known.get(e['file'], 'none')[:12]}")
+    return changed
 
 
 def verify() -> int:
@@ -229,12 +256,13 @@ def main() -> int:
     group.add_argument("--force", action="store_true", help="download everything again")
     group.add_argument("--verify", action="store_true", help="check local files against MANIFEST.md")
     group.add_argument("--list", metavar="URL", help="list document links on an index page")
+    parser.add_argument("--dest", type=Path, help="download here instead of corpus/raw/")
     args = parser.parse_args()
     if args.verify:
         return verify()
     if args.list:
         return list_documents(args.list)
-    return fetch(force=args.force)
+    return fetch(force=args.force, dest=args.dest)
 
 
 if __name__ == "__main__":

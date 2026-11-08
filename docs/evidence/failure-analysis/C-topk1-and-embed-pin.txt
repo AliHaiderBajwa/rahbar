@@ -1,0 +1,6 @@
+top_k=1: recall@1 = 0.526; partial or missed: [('g01', 0.5), ('g02', 0.5), ('g03', 0.0), ('g04', 0.0), ('g06', 0.5), ('g07', 0.5), ('g08', 0.5), ('g11', 0.0), ('g12', 0.0), ('v03', 0.0), ('e01', 0.0), ('i01', 0.5)]
+top_k=5: recall@5 = 0.868; partial or missed: [('g04', 0.5), ('g11', 0.0), ('g12', 0.0)]
+{"status":"not ready","failed":["embed_model"],"checks":{"chroma":"ok","collection":"ok","embed_model":"embedding model mismatch: collection 'rahbar' was indexed with embed_model='nomic-embed-text' (dimension=768) but this API has EMBED_MODEL='all-minilm'","redis":"ok"}}
+HTTP 503
+{"ts": "2026-11-07T16:20:56Z", "level": "ERROR", "logger": "rahbar.api", "msg": "embedding model mismatch: refusing to become ready", "request_id": "-", "conflict": "embedding model mismatch: collection 'rahbar' was indexed with embed_model='nomic-embed-text' (dimension=768) but this API has EMBED_MODEL='all-minilm'", "api_embed_model": "all-minilm"}
+{"ts": "2026-11-07T16:20:57Z", "level": "ERROR", "logger": "rahbar.health", "msg": "not ready: embedding pin", "request_id": "6194b6f43ff2428ab603769898cd0448", "conflict": "embedding model mismatch: collection 'rahbar' was indexed with embed_model='nomic-embed-text' (dimension=768) but this API has EMBED_MODEL='all-minilm'"}

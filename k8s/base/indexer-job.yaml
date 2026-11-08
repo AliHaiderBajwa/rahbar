@@ -1,0 +1,80 @@
+# The indexer is a Job, not part of the api (ADR 0001, section 4.2): it runs once,
+# writes the index, and exits. The api only reads. Re-index with no redeploy:
+#   kubectl create job --from=cronjob/reindex manual-reindex-1 -n rahbar
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: indexer
+  namespace: rahbar
+  labels: {app: indexer, app.kubernetes.io/part-of: rahbar}
+spec:
+  backoffLimit: 4                 # retries with exponential back-off, then the Job fails
+  activeDeadlineSeconds: 3600
+  template:
+    metadata:
+      labels: {app: indexer, app.kubernetes.io/part-of: rahbar}
+    spec:
+      serviceAccountName: indexer
+      enableServiceLinks: false
+      automountServiceAccountToken: false
+      restartPolicy: OnFailure
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        seccompProfile: {type: RuntimeDefault}
+      initContainers:
+        # Download the corpus listed in corpus/sources.yaml into an emptyDir and compare
+        # every SHA-256 with the committed corpus/MANIFEST.md (PIPELINE.md, "How the
+        # documents reach the Job"). Nothing from nu.edu.pk is baked into an image.
+        - name: fetch-corpus
+          image: rahbar-indexer
+          imagePullPolicy: IfNotPresent
+          command: ["python", "corpus/fetch.py", "--dest", "/corpus"]
+          resources:
+            requests:
+              cpu: 20m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 192Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - {name: corpus, mountPath: /corpus}
+            - {name: tmp, mountPath: /tmp}
+      containers:
+        - name: indexer
+          image: rahbar-indexer
+          imagePullPolicy: IfNotPresent
+          args: []                      # the real pipeline; ["--dummy"] for week-1 testing
+          envFrom:
+            - configMapRef: {name: rahbar-config}
+          # Measured peak 186Mi / 1411m CPU (docs/evidence/kubectl-top-indexer.txt), OCR of the
+          # scanned 2023 rules. Limit 512Mi = 2.7x the sampled peak (samples are 15 s apart).
+          # Too low -> OOMKilled, exit code 137, and the Job retries up to backoffLimit.
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: "1500m"
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
+          volumeMounts:
+            - {name: corpus, mountPath: /corpus, readOnly: true}
+            - {name: tmp, mountPath: /tmp}      # pdf2image and tesseract write here
+      volumes:
+        - name: corpus
+          emptyDir: {sizeLimit: 256Mi}
+        - name: tmp
+          emptyDir: {sizeLimit: 512Mi}

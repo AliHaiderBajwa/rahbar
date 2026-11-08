@@ -1,0 +1,9 @@
+$ kubectl -n rahbar get endpoints api -o wide
+NAME   ENDPOINTS                                         AGE
+api    10.42.0.10:8000,10.42.0.11:8000,10.42.0.12:8000   21m
+
+$ kubectl -n rahbar get pods -l app=api -o wide
+NAME                   READY   STATUS    RESTARTS   AGE   IP           NODE                  NOMINATED NODE   READINESS GATES
+api-68d9d48666-69h8r   1/1     Running   0          21m   10.42.0.11   k3d-rahbar-server-0   <none>           <none>
+api-68d9d48666-6nj4d   1/1     Running   0          21m   10.42.0.12   k3d-rahbar-server-0   <none>           <none>
+api-68d9d48666-jlmb8   1/1     Running   0          21m   10.42.0.10   k3d-rahbar-server-0   <none>           <none>
